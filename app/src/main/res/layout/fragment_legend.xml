@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    tools:context=".MainActivity">
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg"
+        android:scaleType="centerCrop"
+        />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingTop="80dp"
+
+        tools:context=".ui.fragments.FlatStartFragment">
+
+        <TextView
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Приветствуем тебя авантюрист! Город заполонили призрачные О! Наши источники сообщают что они прячутся в стенах новых домов.
+в твоём распроряжении сверхсекретный прототип детектора О. Твоя задача обнаружить все О и спасти Город.
+"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/b_legend_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Назад" />
+
+
+    </LinearLayout>
+
+</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

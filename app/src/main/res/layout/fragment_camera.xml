@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/cameraview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/ib_camera_record"
+            android:layout_width="120sp"
+            android:layout_height="120sp"
+            android:layout_margin="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@drawable/rec" />
+
+        <ImageButton
+            android:visibility="gone"
+            android:id="@+id/ib_camera_stop"
+            android:layout_width="120sp"
+            android:layout_height="120sp"
+            android:layout_margin="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</FrameLayout>

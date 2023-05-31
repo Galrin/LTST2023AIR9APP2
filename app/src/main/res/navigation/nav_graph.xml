@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/NCNNCameraFragment"
+        android:name="com.example.ltst2023air9.ui.ncnn.NCNNCameraFragment"
+        android:label="fragment_n_c_n_n_camera"
+        tools:layout="@layout/fragment_n_c_n_n_camera">
+        <action
+            android:id="@+id/action_NCNNCameraFragment_to_analyzeFragment"
+            app:destination="@id/analyzeFragment" />
+        <action
+            android:id="@+id/action_NCNNCameraFragment_to_flatStepFragment"
+            app:destination="@id/flatStepFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.MainMenuFragment"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_houseStartMenuFragment"
+            app:destination="@id/houseStartMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_houseStartFragment"
+            app:destination="@id/houseStartFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_legendFragment"
+            app:destination="@id/legendFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_NCNNCameraHelperFragment"
+            app:destination="@id/NCNNCameraHelperFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseStartFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.HouseStartFragment"
+        android:label="fragment_house_start"
+        tools:layout="@layout/fragment_house_start" >
+        <action
+            android:id="@+id/action_houseStartFragment_to_flatMenuFragment"
+            app:destination="@id/flatMenuFragment" />
+        <action
+            android:id="@+id/action_houseStartFragment_to_flatStartFragment"
+            app:destination="@id/flatStartFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseStartMenuFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.HouseStartMenuFragment"
+        android:label="fragment_house_start_menu"
+        tools:layout="@layout/fragment_house_start_menu" >
+        <action
+            android:id="@+id/action_houseStartMenuFragment_to_houseStartFragment"
+            app:destination="@id/houseStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatMenuFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.FlatMenuFragment"
+        android:label="fragment_flat_menu"
+        tools:layout="@layout/fragment_flat_menu" >
+        <action
+            android:id="@+id/action_flatMenuFragment_to_flatStartFragment"
+            app:destination="@id/flatStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatStartFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.FlatStartFragment"
+        android:label="fragment_flat_start"
+        tools:layout="@layout/fragment_flat_start" >
+        <action
+            android:id="@+id/action_flatStartFragment_to_flatStepFragment"
+            app:destination="@id/flatStepFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatEndFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.FlatEndFragment"
+        android:label="fragment_flat_end"
+        tools:layout="@layout/fragment_flat_end" >
+        <action
+            android:id="@+id/action_flatEndFragment_to_houseEndFragment"
+            app:destination="@id/houseEndFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_flatEndFragment_to_flatMenuFragment"
+            app:destination="@id/flatMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseEndFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.HouseEndFragment"
+        android:label="fragment_house_end"
+        tools:layout="@layout/fragment_house_end" >
+        <action
+            android:id="@+id/action_houseEndFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatStepFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.FlatStepFragment"
+        android:label="fragment_flat_step"
+        tools:layout="@layout/fragment_flat_step" >
+        <action
+            android:id="@+id/action_flatStepFragment_to_NCNNCameraFragment"
+            app:destination="@id/NCNNCameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.ReportsFragment"
+        android:label="fragment_reports"
+        tools:layout="@layout/fragment_reports" >
+        <action
+            android:id="@+id/action_reportsFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.ltst2023air9.MainActivity"
+        android:label="activity_splash"
+        tools:layout="@layout/activity_splash" />
+    <fragment
+        android:id="@+id/analyzeFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.AnalyzeFragment"
+        android:label="fragment_analyze"
+        tools:layout="@layout/fragment_analyze" >
+        <action
+            android:id="@+id/action_analyzeFragment_to_flatEndFragment"
+            app:destination="@id/flatEndFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/legendFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.LegendFragment"
+        android:label="fragment_legend"
+        tools:layout="@layout/fragment_legend" >
+        <action
+            android:id="@+id/action_legendFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/NCNNCameraHelperFragment"
+        android:name="com.example.ltst2023air9.ui.NCNNHelperFragment"
+        android:label="NCNNCameraHelperFragment" >
+        <action
+            android:id="@+id/action_NCNNCameraHelperFragment_to_analyzeFragment"
+            app:destination="@id/analyzeFragment" />
+    </fragment>
+</navigation>

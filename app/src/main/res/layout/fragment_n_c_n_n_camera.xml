@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/iv_prev_detector"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/white"/>
+    <LinearLayout
+        android:id="@+id/ll_video_header"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="left"
+        android:background="#35eeeeee">
+        <Button
+            android:id="@+id/b_pick_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Загрузить видео"
+            />
+
+        <ImageButton
+            android:layout_marginStart="10dp"
+            android:id="@+id/b_detector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="?android:attr/fingerprintAuthDrawable"
+            tools:src="?android:attr/fingerprintAuthDrawable" />
+    </LinearLayout>
+    <ImageButton
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40sp"
+        android:id="@+id/capture"
+        android:src="@drawable/round_fiber_manual_record_24"
+        android:scaleType="centerCrop"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <ImageButton
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10sp"
+        android:src="@drawable/round_flash_on_24"
+        app:tint="#fff"
+        android:id="@+id/toggleFlash"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+
+</RelativeLayout>
