@@ -115,26 +115,6 @@ public class NCNNHelperFragment extends Fragment {
         return fragment;
     }
 
-    protected void initViewID(View v) {
-        toolbar = v.findViewById(R.id.tool_bar);
-        resultImageView = v.findViewById(R.id.imageView);
-        tvNMNThreshold = v.findViewById(R.id.valTxtView);
-        tvInfo = v.findViewById(R.id.tv_info);
-        tvNMS = v.findViewById(R.id.txtNMS);
-        tvThreshold = v.findViewById(R.id.txtThresh);
-        nmsSeekBar = v.findViewById(R.id.nms_seek);
-        thresholdSeekBar = v.findViewById(R.id.threshold_seek);
-        btnPhoto = v.findViewById(R.id.button);
-        btnVideo = v.findViewById(R.id.btn_video);
-        viewFinder = v.findViewById(R.id.view_finder);
-        sbVideo = v.findViewById(R.id.sb_video);
-        sbVideo.setVisibility(View.GONE);
-        sbVideoSpeed = v.findViewById(R.id.sb_video_speed);
-        sbVideoSpeed.setMin(VIDEO_SPEED_MIN);
-        sbVideoSpeed.setMax(VIDEO_SPEED_MAX);
-        sbVideoSpeed.setVisibility(View.GONE);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
