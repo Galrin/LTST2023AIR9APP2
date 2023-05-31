@@ -186,7 +186,6 @@ public class NCNNHelperFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        service.shutdown();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
