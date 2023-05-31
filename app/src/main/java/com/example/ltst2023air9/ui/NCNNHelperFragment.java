@@ -2,20 +2,15 @@ package com.example.ltst2023air9.ui;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,42 +31,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.camera.core.AspectRatio;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageProxy;
-import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.video.MediaStoreOutputOptions;
-import androidx.camera.video.Quality;
-import androidx.camera.video.QualitySelector;
 import androidx.camera.video.Recorder;
 import androidx.camera.video.Recording;
 import androidx.camera.video.VideoCapture;
-import androidx.camera.video.VideoRecordEvent;
 import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.YoloV5Ncnn;
-import com.example.ltst2023air9.model.Flat;
-import com.example.ltst2023air9.model.House;
-import com.example.ltst2023air9.ui.fragments.HouseStartFragment;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
+
 //import static androidx.camera.core.internal.utils.ImageUtil.createBitmapFromImageProxy;
 public class NCNNHelperFragment extends Fragment {
 //    @NonNull
@@ -89,6 +66,13 @@ public class NCNNHelperFragment extends Fragment {
     public static int YOLOV5_CUSTOM_LAYER = 11;
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
     public static boolean USE_GPU = false;
+    private final AtomicBoolean detectCamera = new AtomicBoolean(false);
+    private final AtomicBoolean detectPhoto = new AtomicBoolean(false);
+    private final AtomicBoolean detectVideo = new AtomicBoolean(false);
+    private final long endTime = 0;
+    private final double threshold = 0.3;
+    private final double nms_threshold = 0.7;
+    private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
     protected float videoSpeed = 1.0f;
     protected long videoCurFrameLoc = 0;
     protected Bitmap mutableBitmap;
@@ -101,16 +85,13 @@ public class NCNNHelperFragment extends Fragment {
     FFmpegMediaMetadataRetriever mmr;
     double total_fps = 0;
     int fps_count = 0;
+    ImageView mImageView;
     //ImageView mPreviewImage;
-   // ExecutorService detectService = Executors.newSingleThreadExecutor();
+    // ExecutorService detectService = Executors.newSingleThreadExecutor();
     private SeekBar sbVideo;
     private SeekBar sbVideoSpeed;
-    private final AtomicBoolean detectCamera = new AtomicBoolean(false);
-    private final AtomicBoolean detectPhoto = new AtomicBoolean(false);
-    private final AtomicBoolean detectVideo = new AtomicBoolean(false);
     //private final AtomicBoolean mIsPreviewDetectorEnable = new AtomicBoolean(false);
     private long startTime = 0;
-    private final long endTime = 0;
     private int width;
     private int height;
     private Toolbar toolbar;
@@ -123,10 +104,8 @@ public class NCNNHelperFragment extends Fragment {
     private TextView tvInfo;
     private Button btnPhoto;
     private Button btnVideo;
-    private final double threshold = 0.3;
-    private final double nms_threshold = 0.7;
     private TextureView viewFinder;
-    private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
+
     public NCNNHelperFragment() {
         // Required empty public constructor
     }
@@ -190,6 +169,9 @@ public class NCNNHelperFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        mImageView = view.findViewById(R.id.iv_video_detector);
+
         Button pickVideo = view.findViewById(R.id.b_pick_video);
         Button anal = view.findViewById(R.id.b_anal);
         anal.setEnabled(true);
@@ -199,13 +181,14 @@ public class NCNNHelperFragment extends Fragment {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("video/*");
             startActivityForResult(intent, 111);
-            anal.setEnabled(true);
+            //anal.setEnabled(true);
         });
 
         anal.setOnClickListener(v -> {
             NavHostFragment.findNavController(NCNNHelperFragment.this)
                     .navigate(R.id.action_NCNNCameraHelperFragment_to_analyzeFragment);
         });
+
 
         boolean ret_init = yolov5ncnn.Init(getActivity().getAssets());
         if (!ret_init) {
@@ -307,6 +290,9 @@ public class NCNNHelperFragment extends Fragment {
 
                     //detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
                     //showResultOnUI();
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        mImageView.setImageBitmap(bitmap);
+                    });
                     frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 }
                 mmr.release();
