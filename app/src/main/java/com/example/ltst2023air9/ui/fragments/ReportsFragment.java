@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.evrencoskun.tableview.TableView;
 import com.example.ltst2023air9.AppDelegate;
@@ -76,8 +77,12 @@ public class ReportsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button buttonBack = view.findViewById(R.id.b_anal_back);
+        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
+        ImageButton buttonBack = view.findViewById(R.id.b_anal_back);
         buttonBack.setOnClickListener(v -> {
+            appDelegate.getTableViewModel().reinitCellList();
+
             NavHostFragment.findNavController(ReportsFragment.this)
                     .navigate(R.id.action_reportsFragment_to_mainMenuFragment);
         });
@@ -86,7 +91,6 @@ public class ReportsFragment extends Fragment {
         mTableView.setShowCornerView(false);
         mTableView.setClickable(false);
 
-        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
         TableViewModel tableViewModel = appDelegate.getTableViewModel();//new TableViewModel();
 //        tableViewModel.updateRow(5, "hello!");

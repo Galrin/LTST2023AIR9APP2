@@ -309,7 +309,7 @@ public class TableViewModel {
 
     @NonNull
     public void initCellList() {
-         getCellListForSortingTest();
+        getCellListForSortingTest();
     }
 
     @NonNull
@@ -334,5 +334,11 @@ public class TableViewModel {
         Cell cell = new Cell(4 + "-" + row, str);
         list.get(row).set(4, cell);
         //list.get(row).add(4, cell);
+    }
+
+    @NonNull
+    public void reinitCellList() {
+        list =  new ArrayList<>();
+        getCellListForSortingTest();
     }
 }

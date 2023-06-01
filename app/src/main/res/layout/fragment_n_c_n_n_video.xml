@@ -25,14 +25,21 @@
             android:layout_height="wrap_content"
             android:text="Загрузить видео"
             />
-        <Button
-            android:enabled="false"
-            android:layout_marginStart="120dp"
-            android:id="@+id/b_anal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="К анализу"
-            />
+  </LinearLayout>    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:background="#35eeeeee">
+
+    <Button
+        android:enabled="false"
+        android:id="@+id/b_anal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="К анализу"
+        />
   </LinearLayout>
 
 </RelativeLayout>
