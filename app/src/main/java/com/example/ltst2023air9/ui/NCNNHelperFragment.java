@@ -77,7 +77,7 @@ public class NCNNHelperFragment extends Fragment {
     private final double threshold = 0.3;
     private final double nms_threshold = 0.7;
     private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
-    protected float videoSpeed = 20.0f;
+    protected float videoSpeed = 5.0f;
     protected long videoCurFrameLoc = 0;
     protected Bitmap mutableBitmap;
     ExecutorService service;
