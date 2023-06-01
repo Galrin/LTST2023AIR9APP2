@@ -2,6 +2,7 @@ package com.example.ltst2023air9.ui;
 
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -76,6 +77,17 @@ public class DetectorResultsAnalyzer {
             door = 0;
         }
 
+        floor_bad = min(floor_bad, 1);
+        floor_good = min(floor_good, 1);
+
+        wall_bad = min(wall_bad, 1);
+        wall_good = min(wall_good, 1);
+
+        roof_bad = min(roof_bad, 1);
+        roof_good = min(roof_good, 1);
+
+
+
         int have_trash = counter.get("trash") > 3 ? 1 : 0;
 
 
@@ -85,6 +97,8 @@ public class DetectorResultsAnalyzer {
         int rozetki = wall_good > 0.95 & window > 0 ? 0 + ran.nextInt(5) : 0;
 
         double set_radiators = counter.get("radiator") * 1.0 / max(counter.get("window"), 1);
+
+        set_radiators = min(set_radiators, 1);
 
         int kitchen = wall_good + floor_good + roof_good > 0.95 * 3 ? 1 : 0;
 
