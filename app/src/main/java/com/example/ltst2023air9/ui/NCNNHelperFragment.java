@@ -166,7 +166,7 @@ public class NCNNHelperFragment extends Fragment {
 
         anal.setOnClickListener(v -> {
             NavHostFragment.findNavController(NCNNHelperFragment.this)
-                    .navigate(R.id.action_NCNNCameraHelperFragment_to_analyzeFragment);
+                    .navigate(R.id.action_NCNNCameraHelperFragment_to_reportsFragment);
         });
 
 

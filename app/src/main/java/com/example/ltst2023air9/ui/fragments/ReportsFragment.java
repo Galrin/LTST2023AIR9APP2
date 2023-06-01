@@ -2,13 +2,18 @@ package com.example.ltst2023air9.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.evrencoskun.tableview.TableView;
 import com.example.ltst2023air9.R;
+import com.example.ltst2023air9.ui.fragments.tableview.TableViewAdapter;
+import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +30,7 @@ public class ReportsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private TableView mTableView;
     public ReportsFragment() {
         // Required empty public constructor
     }
@@ -62,5 +67,23 @@ public class ReportsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_reports, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mTableView = view.findViewById(R.id.tableview);
+        mTableView.setRowHeaderWidth(0);
+        mTableView.setShowCornerView(false);
+        mTableView.setClickable(false);
+
+        TableViewModel tableViewModel = new TableViewModel();
+        TableViewAdapter tableViewAdapter = new TableViewAdapter(tableViewModel);
+        mTableView.setAdapter(tableViewAdapter);
+        tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
+                .getRowHeaderList(), tableViewModel.getCellList());
+
+
     }
 }

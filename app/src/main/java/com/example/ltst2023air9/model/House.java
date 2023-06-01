@@ -7,6 +7,8 @@ public class House {
     final String uuid = UUID.randomUUID().toString();
     Set<Flat> flats;
 
+    String name;
+
     public String getUuid() {
         return uuid;
     }
@@ -17,5 +19,13 @@ public class House {
 
     public void setFlats(Set<Flat> flats) {
         this.flats = flats;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
