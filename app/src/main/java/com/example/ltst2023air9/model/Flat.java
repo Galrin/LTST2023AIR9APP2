@@ -9,6 +9,8 @@ public class Flat {
 
     int floor;
 
+    int section;
+
     public String getUuid() {
         return uuid;
     }
@@ -27,5 +29,12 @@ public class Flat {
 
     public void setCurrentCheckpoint(int currentCheckpoint) {
         this.currentCheckpoint = currentCheckpoint;
+    }
+
+    public void setSection(int section) {
+        this.section = section;
+    }
+    public int getSection() {
+        return section;
     }
 }

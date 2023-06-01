@@ -130,9 +130,11 @@ public class HouseStartFragment extends Fragment {
                         ///
 
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-
+//
+//                            NavHostFragment.findNavController(HouseStartFragment.this)
+//                                    .navigate(R.id.action_houseStartFragment_to_flatStartFragment);
                             NavHostFragment.findNavController(HouseStartFragment.this)
-                                    .navigate(R.id.action_houseStartFragment_to_flatStartFragment);
+                                    .navigate(R.id.action_houseStartFragment_to_houseStartMenuFragment);
                         }, 250);
                         //              doSomething();
                     }

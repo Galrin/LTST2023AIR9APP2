@@ -25,7 +25,13 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_houseStartMenuFragment"
             app:destination="@id/houseStartMenuFragment"
-            app:enterAnim="@android:anim/fade_in" />
+            app:enterAnim="@anim/slide_below_to_center"
+            app:exitAnim="@anim/slide_center_to_top"
+            app:popEnterAnim="@anim/slide_top_to_center"
+            app:popExitAnim="@anim/slide_center_to_below"
+            app:popUpTo="@id/mainMenuFragment"
+
+            />
         <action
             android:id="@+id/action_mainMenuFragment_to_reportsFragment"
             app:destination="@id/reportsFragment"
@@ -54,6 +60,16 @@
             android:id="@+id/action_houseStartFragment_to_flatStartFragment"
             app:destination="@id/flatStartFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_houseStartFragment_to_houseStartMenuFragment"
+            app:destination="@id/houseStartMenuFragment"
+            app:enterAnim="@anim/slide_below_to_center"
+            app:exitAnim="@anim/slide_center_to_top"
+            app:popEnterAnim="@anim/slide_top_to_center"
+            app:popExitAnim="@anim/slide_center_to_below"
+            app:popUpTo="@id/houseStartFragment"
+
+            />
     </fragment>
     <fragment
         android:id="@+id/houseStartMenuFragment"
@@ -63,6 +79,9 @@
         <action
             android:id="@+id/action_houseStartMenuFragment_to_houseStartFragment"
             app:destination="@id/houseStartFragment" />
+        <action
+            android:id="@+id/action_houseStartMenuFragment_to_flatStartFragment"
+            app:destination="@id/flatStartFragment" />
     </fragment>
     <fragment
         android:id="@+id/flatMenuFragment"
@@ -158,5 +177,8 @@
         <action
             android:id="@+id/action_NCNNCameraHelperFragment_to_analyzeFragment"
             app:destination="@id/analyzeFragment" />
+        <action
+            android:id="@+id/action_NCNNCameraHelperFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment" />
     </fragment>
 </navigation>
