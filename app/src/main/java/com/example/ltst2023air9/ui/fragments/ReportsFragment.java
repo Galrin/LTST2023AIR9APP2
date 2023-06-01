@@ -91,6 +91,8 @@ public class ReportsFragment extends Fragment {
         tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
                 .getRowHeaderList(), tableViewModel.getCellList());
 
+        tableViewAdapter.updateRow(2, "hello!");
+
 
     }
 }

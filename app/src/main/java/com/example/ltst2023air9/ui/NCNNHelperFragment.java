@@ -57,6 +57,7 @@ public class NCNNHelperFragment extends Fragment {
 //        return createBitmapFromImageProxy(this);
 //    }
 
+
     public static int VIDEO_SPEED_MAX = 20 + 1;
     public static int VIDEO_SPEED_MIN = 1;
     public static int YOLOV5S = 1;
@@ -104,6 +105,9 @@ public class NCNNHelperFragment extends Fragment {
     private Button btnPhoto;
     private Button btnVideo;
     private TextureView viewFinder;
+
+
+    private Object mDetectResult;
 
     public NCNNHelperFragment() {
         // Required empty public constructor
@@ -222,7 +226,7 @@ public class NCNNHelperFragment extends Fragment {
             return;
         }
         detectVideo.set(true);
-        Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
         //sbVideo.setVisibility(View.VISIBLE);
         //sbVideoSpeed.setVisibility(View.VISIBLE);
         try {
@@ -237,6 +241,7 @@ public class NCNNHelperFragment extends Fragment {
             @Override
             public void run() {
                 mmr = new FFmpegMediaMetadataRetriever();
+
                 mmr.setDataSource(path);
                 String dur = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
                 String sfps = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
@@ -252,6 +257,9 @@ public class NCNNHelperFragment extends Fragment {
                 //sbVideo.setMax(duration * 1000);
                 float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 videoCurFrameLoc = 0;
+
+                Handler handler = new Handler(Looper.getMainLooper());
+
                 while (detectVideo.get() && (videoCurFrameLoc) < (duration * 1000L)) {
                     videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
                     //sbVideo.setProgress((int) videoCurFrameLoc);
@@ -270,7 +278,7 @@ public class NCNNHelperFragment extends Fragment {
 
                     Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
                     //showResultOnUI();
-                    new Handler(Looper.getMainLooper()).post(() -> {
+                    handler.post(() -> {
                         mImageView.setImageBitmap(drawBitmap);
                     });
                     frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;

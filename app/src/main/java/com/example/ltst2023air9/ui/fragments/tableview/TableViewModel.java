@@ -41,6 +41,41 @@ import java.util.Random;
 
 public class TableViewModel {
 
+    public static final String FLAT_TYPE_ALL_WITHOUT_MOP = "Все помещения кроме МОП";
+    public static final String FLAT_TYPE_ALL = "Все помещения";
+    public static final String FLAT_TYPE_KITCHEN = "Жилая/Кухня";
+    public static final String FLAT_TYPE_BATHROOM = "Ванная";
+    public static final String FLAT_TYPE_MOP = "МОП";
+
+
+    public static final String SURFACE_FLOOR = "Пол";
+    public static final String SURFACE_WALL = "Стена";
+    public static final String SURFACE_ROOF = "Потолок";
+    public static final String SURFACE_NONE = "-";
+
+    public static final String CLASS_NO = "Нет отделки";
+    public static final String CLASS_DARK = "Черновая";
+    public static final String CLASS_WHITE = "Чистовая";
+    public static final String CLASS_DOOR = "Двери";
+    public static final String CLASS_TRASH = "Мусор";
+    public static final String CLASS_SWITCH = "Розетки и выключатели";
+    public static final String CLASS_WINDOW = "Отделка окна";
+    public static final String CLASS_RADIATOR = "Установленная батарея";
+    public static final String CLASS_KITCHEN = "Кухня";
+    public static final String CLASS_TOILET = "Унитаз";
+    public static final String CLASS_BATHROOM = "Ванна";
+    public static final String CLASS_cockleshell = "Раковина";
+
+    public static final String METRIC_PERCENT_WITH_STATE = "Доля помещений с этим состоянием";
+    public static final String METRIC_FACT = "Факт наличия";
+    public static final String METRIC_AMOUNT = "Количество";
+    public static final String METRIC_PERCENT_WITH_WINDOW = "Доля от общего числа окон";
+    public static final String METRIC_PERCENT_WINDOW = "Доля от общего числа окон";
+    public static final String METRIC_PERCENT_BATHROOM = "Доля от ванных комнат";
+    public static final String METRIC_PERCENT_DOOR = "Доля от дверных проемов";
+
+
+
 
     // Columns indexes
     public static final int MOOD_COLUMN_INDEX = 3;
@@ -53,8 +88,8 @@ public class TableViewModel {
     public static final int GIRL = 2;
 
     // Constant size for dummy data sets
-    private static final int COLUMN_SIZE = 8;
-    private static final int ROW_SIZE = 18;
+    private static final int COLUMN_SIZE = 5;
+    private static final int ROW_SIZE = 27;
 
     // Drawables
     @DrawableRes
@@ -66,6 +101,7 @@ public class TableViewModel {
     @DrawableRes
     private final int mSadDrawable;
 
+    List<List<Cell>> list = new ArrayList<>();
     public TableViewModel() {
         // initialize drawables
         mBoyDrawable = R.drawable.ic_male;
@@ -97,9 +133,6 @@ public class TableViewModel {
         list.add(new ColumnHeader(String.valueOf(3), "Класс"));
         list.add(new ColumnHeader(String.valueOf(4), "Метрика"));
         list.add(new ColumnHeader(String.valueOf(5), "Готовность Модель"));
-        list.add(new ColumnHeader(String.valueOf(6), "Готовность Эксперт"));
-        list.add(new ColumnHeader(String.valueOf(7), "Вес"));
-        list.add(new ColumnHeader(String.valueOf(8), "Отклонение"));
 
         return list;
     }
@@ -109,36 +142,152 @@ public class TableViewModel {
      */
     @NonNull
     private List<List<Cell>> getCellListForSortingTest() {
-        List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            List<Cell> cellList = new ArrayList<>();
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                Object text = "cell " + String.valueOf(j) + " " + String.valueOf(i);
+        List<String>typeList = new ArrayList<>();
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
+        typeList.add(FLAT_TYPE_ALL);
+        typeList.add(FLAT_TYPE_ALL);
+        typeList.add(FLAT_TYPE_ALL);
+        typeList.add(FLAT_TYPE_KITCHEN);
+        typeList.add(FLAT_TYPE_KITCHEN);
+        typeList.add(FLAT_TYPE_KITCHEN);
+        typeList.add(FLAT_TYPE_BATHROOM);
+        typeList.add(FLAT_TYPE_BATHROOM);
+        typeList.add(FLAT_TYPE_BATHROOM);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
+        typeList.add(FLAT_TYPE_MOP);
 
-                final int random = new Random().nextInt();
-               // if (j == 0) {
-                   // text = random;
-//                } else if (j == 1) {
-//                    text = random;
-//                } else if (j == MOOD_COLUMN_INDEX) {
-//                    text = random % 2 == 0 ? HAPPY : SAD;
-//                } else if (j == GENDER_COLUMN_INDEX) {
-//                    text = random % 2 == 0 ? BOY : GIRL;
-//                }
+
+        List<String>surfaceList = new ArrayList<>();
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_ROOF);
+        surfaceList.add(SURFACE_ROOF);
+        surfaceList.add(SURFACE_ROOF);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_NONE);
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_FLOOR);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_WALL);
+        surfaceList.add(SURFACE_ROOF);
+        surfaceList.add(SURFACE_ROOF);
+        surfaceList.add(SURFACE_ROOF);
+
+        List<String>classList = new ArrayList<>();
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+        classList.add(CLASS_DOOR);
+        classList.add(CLASS_TRASH);
+        classList.add(CLASS_SWITCH);
+        classList.add(CLASS_WINDOW);
+        classList.add(CLASS_RADIATOR);
+        classList.add(CLASS_KITCHEN);
+        classList.add(CLASS_TOILET);
+        classList.add(CLASS_BATHROOM);
+        classList.add(CLASS_cockleshell);
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+        classList.add(CLASS_NO);
+        classList.add(CLASS_DARK);
+        classList.add(CLASS_WHITE);
+
+        List<String>metricList = new ArrayList<>();
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_DOOR);
+        metricList.add(METRIC_FACT);
+        metricList.add(METRIC_AMOUNT);
+        metricList.add(METRIC_PERCENT_WITH_WINDOW);
+        metricList.add(METRIC_PERCENT_WITH_WINDOW);
+        metricList.add(METRIC_AMOUNT);
+        metricList.add(METRIC_PERCENT_BATHROOM);
+        metricList.add(METRIC_PERCENT_BATHROOM);
+        metricList.add(METRIC_PERCENT_BATHROOM);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+        metricList.add(METRIC_PERCENT_WITH_STATE);
+
+        //List<List<Cell>> list = new ArrayList<>();
+        for (int row = 0; row < ROW_SIZE; row++) {
+            List<Cell> cellList = new ArrayList<>();
+            for (int column = 0; column < COLUMN_SIZE; column++) {
+                Object text = "";//"cell " + String.valueOf(column) + " " + String.valueOf(row);
+
+                //final int random = new Random().nextInt();
+                switch (column) {
+                    case 0:
+                        text = typeList.get(row);
+                        break;
+                    case 1:
+                        text = surfaceList.get(row);
+                        break;
+                    case 2:
+                        text = classList.get(row);
+                        break;
+                    case 3:
+                        text = metricList.get(row);
+                        break;
+                }
 
                 // Create dummy id.
-                String id = j + "-" + i;
+                String id = column + "-" + row;
 
                 Cell cell;
-//                if (j == 3) {
-//                    cell = new Cell(id, text);
-//                } else if (j == 4) {
-//                    // NOTE female and male keywords for filter will have conflict since "female"
-//                    // contains "male"
-//                    cell = new Cell(id, text);
-//                } else {
+
                     cell = new Cell(id, text);
-                //}
+
                 cellList.add(cell);
             }
             list.add(cellList);

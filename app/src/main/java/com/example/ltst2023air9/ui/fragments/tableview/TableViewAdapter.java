@@ -36,6 +36,7 @@ import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.evrencoskun.tableview.sort.SortState;
 import com.example.ltst2023air9.R;
+import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.ui.fragments.tableview.holder.CellViewHolder;
 import com.example.ltst2023air9.ui.fragments.tableview.holder.ColumnHeaderViewHolder;
 import com.example.ltst2023air9.ui.fragments.tableview.holder.GenderCellViewHolder;
@@ -286,5 +287,11 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
                 // Default view type
                 return 0;
         //}
+    }
+
+    public void updateRow(int row, String str) {
+        String id = 4 + "-" + row;
+        Cell cell = new Cell(id, str);
+        changeCellItem(4, row, cell);
     }
 }
