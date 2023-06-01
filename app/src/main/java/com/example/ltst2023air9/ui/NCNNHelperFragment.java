@@ -62,10 +62,9 @@ public class NCNNHelperFragment extends Fragment {
     public static int YOLOV5S = 1;
     public static int YOLOV4_TINY = 2;
     public static int MOBILENETV2_YOLOV3_NANO = 3;
-    public static int DBFACE = 8;
     public static int YOLOV5_CUSTOM_LAYER = 11;
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
-    public static boolean USE_GPU = false;
+    public static boolean USE_GPU = true;
     private final AtomicBoolean detectCamera = new AtomicBoolean(false);
     private final AtomicBoolean detectPhoto = new AtomicBoolean(false);
     private final AtomicBoolean detectVideo = new AtomicBoolean(false);
@@ -73,7 +72,7 @@ public class NCNNHelperFragment extends Fragment {
     private final double threshold = 0.3;
     private final double nms_threshold = 0.7;
     private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
-    protected float videoSpeed = 1.0f;
+    protected float videoSpeed = 5.0f;
     protected long videoCurFrameLoc = 0;
     protected Bitmap mutableBitmap;
     ExecutorService service;
@@ -201,10 +200,12 @@ public class NCNNHelperFragment extends Fragment {
             Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
+                Object t = cursor.getColumnNames();
                 // String imgNo = cursor.getString(0); // 编号
-                String v_path = cursor.getString(1); // 文件路径
-                String v_size = cursor.getString(2); // 大小
-                String v_name = cursor.getString(3); // 文件名
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+                String v_path = cursor.getString(column_index); // 文件路径
+                //String v_size = cursor.getString(2); // 大小
+                //String v_name = cursor.getString(3); // 文件名
                 detectOnVideo(v_path);
             } else {
                 Toast.makeText(getActivity(), "Video is null", Toast.LENGTH_SHORT).show();
@@ -222,8 +223,8 @@ public class NCNNHelperFragment extends Fragment {
         }
         detectVideo.set(true);
         Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
-        sbVideo.setVisibility(View.VISIBLE);
-        sbVideoSpeed.setVisibility(View.VISIBLE);
+        //sbVideo.setVisibility(View.VISIBLE);
+        //sbVideoSpeed.setVisibility(View.VISIBLE);
         try {
             ListenableFuture<ProcessCameraProvider> processCameraProvider = ProcessCameraProvider.getInstance(getActivity());
 
@@ -248,12 +249,12 @@ public class NCNNHelperFragment extends Fragment {
                 if (rota != null) {
                     rotate = Float.parseFloat(rota);
                 }
-                sbVideo.setMax(duration * 1000);
+                //sbVideo.setMax(duration * 1000);
                 float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 videoCurFrameLoc = 0;
                 while (detectVideo.get() && (videoCurFrameLoc) < (duration * 1000L)) {
                     videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
-                    sbVideo.setProgress((int) videoCurFrameLoc);
+                    //sbVideo.setProgress((int) videoCurFrameLoc);
                     final Bitmap b = mmr.getFrameAtTime(videoCurFrameLoc, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
                     if (b == null) {
                         continue;
@@ -267,10 +268,10 @@ public class NCNNHelperFragment extends Fragment {
 
                     /// bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-                    //detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
+                    Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
                     //showResultOnUI();
                     new Handler(Looper.getMainLooper()).post(() -> {
-                        mImageView.setImageBitmap(bitmap);
+                        mImageView.setImageBitmap(drawBitmap);
                     });
                     frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 }
@@ -279,8 +280,8 @@ public class NCNNHelperFragment extends Fragment {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            sbVideo.setVisibility(View.GONE);
-                            sbVideoSpeed.setVisibility(View.GONE);
+                            //sbVideo.setVisibility(View.GONE);
+                            //sbVideoSpeed.setVisibility(View.GONE);
                             Toast.makeText(getActivity(), "Video end!", Toast.LENGTH_LONG).show();
                         }
                     });
