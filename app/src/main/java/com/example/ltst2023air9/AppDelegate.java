@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.model.Flat;
 import com.example.ltst2023air9.model.House;
+import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,15 @@ public class AppDelegate extends Application {
 //    {
 //        flats.add(new Device("Колонка Алиса", R.drawable.alice));
 //    }
+    TableViewModel tableViewModel = new TableViewModel();
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        tableViewModel.initCellList();
+
+//        tableViewModel.updateRow(5, "hello!");
 //
 //        File grousDir = getApplicationContext().getDir("groups", Context.MODE_PRIVATE); //Creating an internal dir;
 //        if (!grousDir.exists())
@@ -78,4 +84,7 @@ public class AppDelegate extends Application {
         return currentHouse;
     }
 
+    public TableViewModel getTableViewModel() {
+        return tableViewModel;
+    }
 }

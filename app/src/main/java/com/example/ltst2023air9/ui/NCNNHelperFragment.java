@@ -40,6 +40,7 @@ import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.YoloV5Ncnn;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -259,6 +260,7 @@ public class NCNNHelperFragment extends Fragment {
                 videoCurFrameLoc = 0;
 
                 Handler handler = new Handler(Looper.getMainLooper());
+                AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
                 while (detectVideo.get() && (videoCurFrameLoc) < (duration * 1000L)) {
                     videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
@@ -282,6 +284,8 @@ public class NCNNHelperFragment extends Fragment {
                         mImageView.setImageBitmap(drawBitmap);
                     });
                     frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
+
+                    appDelegate.getTableViewModel().updateRow(11, "hello % for..");
                 }
                 mmr.release();
                 if (detectVideo.get()) {

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.evrencoskun.tableview.TableView;
+import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.ui.fragments.tableview.TableViewAdapter;
 import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
@@ -85,13 +86,17 @@ public class ReportsFragment extends Fragment {
         mTableView.setShowCornerView(false);
         mTableView.setClickable(false);
 
-        TableViewModel tableViewModel = new TableViewModel();
+        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
+        TableViewModel tableViewModel = appDelegate.getTableViewModel();//new TableViewModel();
+//        tableViewModel.updateRow(5, "hello!");
+
         TableViewAdapter tableViewAdapter = new TableViewAdapter(tableViewModel);
         mTableView.setAdapter(tableViewAdapter);
         tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
                 .getRowHeaderList(), tableViewModel.getCellList());
 
-        tableViewAdapter.updateRow(2, "hello!");
+        //tableViewAdapter.updateRow(2, "hello!");
 
 
     }

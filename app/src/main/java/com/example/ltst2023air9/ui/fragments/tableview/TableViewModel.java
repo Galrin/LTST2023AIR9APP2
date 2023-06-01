@@ -24,6 +24,8 @@
 
 package com.example.ltst2023air9.ui.fragments.tableview;
 
+import android.util.Log;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import com.example.ltst2023air9.R;
@@ -306,8 +308,13 @@ public class TableViewModel {
     }
 
     @NonNull
+    public void initCellList() {
+         getCellListForSortingTest();
+    }
+
+    @NonNull
     public List<List<Cell>> getCellList() {
-        return getCellListForSortingTest();
+        return list;
     }
 
     @NonNull
@@ -318,5 +325,15 @@ public class TableViewModel {
     @NonNull
     public List<ColumnHeader> getColumnHeaderList() {
         return getRandomColumnHeaderList();
+    }
+
+    public void updateRow(int row, String str) {
+        Log.d("list", "size: " + list.size());
+        Log.d("list", "coordinate: col " + 4 + ", row " + row + " = " + list.get(row).get(4));
+
+        Cell cell = new Cell(4 + "-" + row, str);
+        //int elementIndex  = list.get(row).indexOf(new Cell(4 + "-" + row, ""));
+        list.get(row).add(4, cell);
+        //changeCellItem(4, row, cell);
     }
 }
