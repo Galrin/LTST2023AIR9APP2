@@ -270,7 +270,7 @@ public class NCNNHelperFragment extends Fragment {
                 while (detectVideo.get() && (videoCurFrameLoc) < (duration * 1000L)) {
                     videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
                     //sbVideo.setProgress((int) videoCurFrameLoc);
-                    final Bitmap b = mmr.getFrameAtTime(videoCurFrameLoc, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
+                    final Bitmap b = mmr.getFrameAtTime(videoCurFrameLoc, FFmpegMediaMetadataRetriever.OPTION_CLOSEST_SYNC );
                     if (b == null) {
                         continue;
                     }
@@ -300,7 +300,7 @@ public class NCNNHelperFragment extends Fragment {
                     });
                     frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
 
-                    appDelegate.getTableViewModel().updateRow(11, "hello % for..");
+                    //appDelegate.getTableViewModel().updateRow(11, "hello % for..");
                 }
                 mmr.release();
                 ArrayList<String> metrics = detectorAnalyzer.detect();
