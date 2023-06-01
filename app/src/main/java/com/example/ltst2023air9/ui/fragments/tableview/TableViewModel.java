@@ -328,12 +328,11 @@ public class TableViewModel {
     }
 
     public void updateRow(int row, String str) {
-        Log.d("list", "size: " + list.size());
-        Log.d("list", "coordinate: col " + 4 + ", row " + row + " = " + list.get(row).get(4));
+        //Log.d("list", "size: " + list.size());
+        //Log.d("list", "coordinate: col " + 4 + ", row " + row + " = " + list.get(row).get(4).getData());
 
         Cell cell = new Cell(4 + "-" + row, str);
-        //int elementIndex  = list.get(row).indexOf(new Cell(4 + "-" + row, ""));
-        list.get(row).add(4, cell);
-        //changeCellItem(4, row, cell);
+        list.get(row).set(4, cell);
+        //list.get(row).add(4, cell);
     }
 }
