@@ -5,10 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.evrencoskun.tableview.TableView;
 import com.example.ltst2023air9.R;
@@ -73,6 +75,11 @@ public class ReportsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Button buttonBack = view.findViewById(R.id.b_anal_back);
+        buttonBack.setOnClickListener(v -> {
+            NavHostFragment.findNavController(ReportsFragment.this)
+                    .navigate(R.id.action_reportsFragment_to_mainMenuFragment);
+        });
         mTableView = view.findViewById(R.id.tableview);
         mTableView.setRowHeaderWidth(0);
         mTableView.setShowCornerView(false);

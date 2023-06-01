@@ -54,7 +54,7 @@ public class TableViewModel {
 
     // Constant size for dummy data sets
     private static final int COLUMN_SIZE = 8;
-    private static final int ROW_SIZE = 9;
+    private static final int ROW_SIZE = 18;
 
     // Drawables
     @DrawableRes
