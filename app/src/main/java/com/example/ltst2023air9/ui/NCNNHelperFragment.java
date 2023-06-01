@@ -46,10 +46,13 @@ import com.example.ltst2023air9.YoloV5Ncnn;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
+
+import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
 
 //import static androidx.camera.core.internal.utils.ImageUtil.createBitmapFromImageProxy;
 public class NCNNHelperFragment extends Fragment {
@@ -74,7 +77,7 @@ public class NCNNHelperFragment extends Fragment {
     private final double threshold = 0.3;
     private final double nms_threshold = 0.7;
     private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
-    protected float videoSpeed = 5.0f;
+    protected float videoSpeed = 20.0f;
     protected long videoCurFrameLoc = 0;
     protected Bitmap mutableBitmap;
     ExecutorService service;
@@ -110,6 +113,8 @@ public class NCNNHelperFragment extends Fragment {
 
     private Object mDetectResult;
 
+    public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
+
     public NCNNHelperFragment() {
         // Required empty public constructor
     }
@@ -122,7 +127,6 @@ public class NCNNHelperFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -227,6 +231,7 @@ public class NCNNHelperFragment extends Fragment {
             return;
         }
         detectVideo.set(true);
+        detectorAnalyzer.clear();
         //Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
         //sbVideo.setVisibility(View.VISIBLE);
         //sbVideoSpeed.setVisibility(View.VISIBLE);
@@ -274,11 +279,21 @@ public class NCNNHelperFragment extends Fragment {
                     width = b.getWidth();
                     height = b.getHeight();
                     final Bitmap bitmap = Bitmap.createBitmap(b, 0, 0, width, height, matrix, false);
-                    startTime = System.currentTimeMillis();
+                    //startTime = System.currentTimeMillis();
 
                     /// bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-                    Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
+                    //Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
+
+
+                    YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, true);
+                    final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
+
+                    if (result != null) {
+                        detectorAnalyzer.add(result);
+                    }
+
+
                     //showResultOnUI();
                     handler.post(() -> {
                         mImageView.setImageBitmap(drawBitmap);
@@ -288,6 +303,13 @@ public class NCNNHelperFragment extends Fragment {
                     appDelegate.getTableViewModel().updateRow(11, "hello % for..");
                 }
                 mmr.release();
+                ArrayList<String> metrics = detectorAnalyzer.detect();
+                int row = 0;
+                for (String val : metrics) {
+                    appDelegate.getTableViewModel().updateRow(row, val);
+                    row += 1;
+                }
+
                 if (detectVideo.get()) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
