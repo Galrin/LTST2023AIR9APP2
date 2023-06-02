@@ -112,7 +112,7 @@ public class NCNNHelperFragment extends Fragment {
 
 
     private Object mDetectResult;
-
+    Button anal;
     public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
 
     public NCNNHelperFragment() {
@@ -161,8 +161,8 @@ public class NCNNHelperFragment extends Fragment {
         mImageView = view.findViewById(R.id.iv_video_detector);
 
         Button pickVideo = view.findViewById(R.id.b_pick_video);
-        Button anal = view.findViewById(R.id.b_anal);
-        anal.setEnabled(true);
+        anal = view.findViewById(R.id.b_anal);
+
 
         pickVideo.setOnClickListener(v -> {
 
@@ -316,6 +316,7 @@ public class NCNNHelperFragment extends Fragment {
                         public void run() {
                             //sbVideo.setVisibility(View.GONE);
                             //sbVideoSpeed.setVisibility(View.GONE);
+                            anal.setEnabled(true);
                             Toast.makeText(getActivity(), "Video end!", Toast.LENGTH_LONG).show();
                         }
                     });
