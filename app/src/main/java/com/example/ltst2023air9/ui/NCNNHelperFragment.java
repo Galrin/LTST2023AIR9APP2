@@ -146,6 +146,9 @@ public class NCNNHelperFragment extends Fragment {
         if (requestCode == 111) {
             // video
             runByVideo(requestCode, resultCode, data);
+
+            anal.setEnabled(false);
+
             //Toast.makeText(getActivity(), "resultCode!! ", Toast.LENGTH_SHORT).show();
             Log.d("onresult", "" + resultCode);
         } else {
@@ -286,7 +289,7 @@ public class NCNNHelperFragment extends Fragment {
                     //Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
 
 
-                    YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, true);
+                    YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, false);
                     final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
 
                     if (result != null) {
