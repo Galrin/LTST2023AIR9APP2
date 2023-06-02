@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.ltst2023air9"
-        minSdk 30
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
