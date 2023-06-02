@@ -57,12 +57,12 @@ public class DetectorResultsAnalyzer {
         double roof_bad = counter.get("roof bad") * 1.0 / zn_roof;
         double roof_good = counter.get("roof good") * 1.0 / zn_roof;
 
-        if (zn_roof == 0) {
+        if (zn_roof == 1) {
             roof_bad = wall_bad;
             roof_good = wall_good;
         }
 
-        if (zn_floor == 0) {
+        if (zn_floor == 1) {
             floor_bad = wall_bad;
             floor_good = wall_good;
         }
