@@ -1,13 +1,19 @@
 package com.example.ltst2023air9.model;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
-public class House {
+public class House implements Serializable {
     final String uuid = UUID.randomUUID().toString();
     Set<Flat> flats;
 
     String name;
+
+    float startLatitude;
+    float startLongtitude;
+
+    int timestamp;
 
     public String getUuid() {
         return uuid;

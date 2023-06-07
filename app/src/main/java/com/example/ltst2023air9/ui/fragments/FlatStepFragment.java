@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,11 +86,21 @@ public class FlatStepFragment extends Fragment {
         initHelper(view);
 
 
+
         view.findViewById(R.id.flat_step_fab).setOnClickListener(v -> {
 //            NavHostFragment.findNavController(FlatStepFragment.this)
 //                    .navigate(R.id.action_flatStepFragment_to_flatStepFragment);
             initHelper(view);
         });
+
+
+        AppDelegate appDelegate = (AppDelegate) view.getContext().getApplicationContext();
+        Flat flat = appDelegate.getCurrentFlat();
+
+        Log.d("step", "flat uuid: " + flat.getUuid());
+        Log.d("step", "flat section: " + flat.getSection());
+        Log.d("step", "flat floor: " + flat.getFloor());
+
     }
 
     private void initHelper(View view) {
@@ -101,7 +112,7 @@ public class FlatStepFragment extends Fragment {
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
                 TapTarget.forView(view.findViewById(R.id.flat_step_fab),
                                 "Точка осмотра",
-                                "Подойдите к точке: " + checkpoint.getName() + ". Когда будете готовы - нажмите кнопку видео съёмки.")
+                                "Подойдите к точке: " + checkpoint.getName().toUpperCase() + ". Когда будете готовы - запишите видео.")
                         // All options below are optional
                         .outerCircleColor(R.color.white)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle

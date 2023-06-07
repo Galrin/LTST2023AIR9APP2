@@ -47,15 +47,16 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_NCNNCameraHelperFragment"
             app:destination="@id/NCNNCameraHelperFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_reportListFragment"
+            app:destination="@id/reportListFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/houseStartFragment"
         android:name="com.example.ltst2023air9.ui.fragments.HouseStartFragment"
         android:label="fragment_house_start"
         tools:layout="@layout/fragment_house_start" >
-        <action
-            android:id="@+id/action_houseStartFragment_to_flatMenuFragment"
-            app:destination="@id/flatMenuFragment" />
         <action
             android:id="@+id/action_houseStartFragment_to_flatStartFragment"
             app:destination="@id/flatStartFragment"
@@ -84,15 +85,6 @@
             app:destination="@id/flatStartFragment" />
     </fragment>
     <fragment
-        android:id="@+id/flatMenuFragment"
-        android:name="com.example.ltst2023air9.ui.fragments.FlatMenuFragment"
-        android:label="fragment_flat_menu"
-        tools:layout="@layout/fragment_flat_menu" >
-        <action
-            android:id="@+id/action_flatMenuFragment_to_flatStartFragment"
-            app:destination="@id/flatStartFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/flatStartFragment"
         android:name="com.example.ltst2023air9.ui.fragments.FlatStartFragment"
         android:label="fragment_flat_start"
@@ -101,6 +93,15 @@
             android:id="@+id/action_flatStartFragment_to_flatStepFragment"
             app:destination="@id/flatStepFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_flatStartFragment_to_flatStartMenuFragment"
+            app:destination="@id/flatStartMenuFragment"
+            app:enterAnim="@anim/slide_below_to_center"
+            app:exitAnim="@anim/slide_center_to_top"
+            app:popEnterAnim="@anim/slide_top_to_center"
+            app:popExitAnim="@anim/slide_center_to_below"
+            app:popUpTo="@id/flatStartFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/flatEndFragment"
@@ -110,10 +111,6 @@
         <action
             android:id="@+id/action_flatEndFragment_to_houseEndFragment"
             app:destination="@id/houseEndFragment"
-            app:enterAnim="@android:anim/fade_in" />
-        <action
-            android:id="@+id/action_flatEndFragment_to_flatMenuFragment"
-            app:destination="@id/flatMenuFragment"
             app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
@@ -159,6 +156,10 @@
             android:id="@+id/action_analyzeFragment_to_flatEndFragment"
             app:destination="@id/flatEndFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_analyzeFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/legendFragment"
@@ -180,5 +181,24 @@
         <action
             android:id="@+id/action_NCNNCameraHelperFragment_to_reportsFragment"
             app:destination="@id/reportsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportListFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.reportlist.ReportListFragment"
+        android:label="fragment_report_list"
+        tools:layout="@layout/fragment_report_list" >
+        <action
+            android:id="@+id/action_reportListFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatStartMenuFragment"
+        android:name="com.example.ltst2023air9.flatStartMenuFragment"
+        android:label="fragment_flat_start_menu"
+        tools:layout="@layout/fragment_flat_start_menu" >
+        <action
+            android:id="@+id/action_flatStartMenuFragment_to_flatStepFragment"
+            app:destination="@id/flatStepFragment" />
     </fragment>
 </navigation>

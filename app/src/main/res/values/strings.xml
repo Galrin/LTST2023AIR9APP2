@@ -24,7 +24,7 @@
     </string>
     <string name="title_activity_altitude">AltitudeActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">заполнение инфы о квартире</string>
+    <string name="hello_blank_fragment">заполнение данных о квартире</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="sort_ascending">Sort Ascending</string>

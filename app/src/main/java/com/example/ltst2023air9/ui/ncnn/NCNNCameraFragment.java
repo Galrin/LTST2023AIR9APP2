@@ -156,7 +156,8 @@ public class NCNNCameraFragment extends Fragment {
                     recording.close();
                     recording = null;
                     String msg = "Error: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getError();
-                    Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    Log.e("camerafragment", msg);
                 }
                 capture.setImageResource(R.drawable.round_fiber_manual_record_24);
             }

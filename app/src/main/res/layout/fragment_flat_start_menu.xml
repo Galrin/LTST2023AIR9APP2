@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".flatStartMenuFragment"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment" />
+    <NumberPicker
+        android:id="@+id/np_flat_start_foor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <NumberPicker
+        android:id="@+id/np_flat_start_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        />
+    <Button
+        android:id="@+id/b_flat_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Продолжить"/>
+</LinearLayout>

@@ -11,10 +11,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
+
 
 public class SplashActivity extends AppCompatActivity {
 
+
+    AppDelegate appDelegate;
     private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.TIRAMISU
             ? new String[]{"android.permission.CAMERA", "android.permission.READ_MEDIA_VIDEO", "android.permission.READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_IMAGES"}
@@ -45,8 +49,36 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         }, 3800);
-    }
 
+        appDelegate = (AppDelegate) getApplicationContext();
+
+        initInstanceState();
+
+    }
+    public void initInstanceState() { // во время splashscreen
+
+        String[] fileList = getApplicationContext().fileList();
+        int fileListSize = fileList.length;
+
+        appDelegate.getHouses().clear();
+
+        for(String houseUUID : fileList) {
+            Log.d("FILE: ", houseUUID);
+            if(houseUUID.startsWith("+")) {
+                //.add(new House(fileUUID));
+
+
+                // загружаем json text. превращаем в class instance
+
+                // заносим полученый класс в список
+                //houses.add(house);
+
+                --fileListSize;
+
+                // progressBar>> ?
+            }
+        }
+    }
     private boolean allPermissionsGranted() {
 
         for (String permission : REQUIRED_PERMISSIONS) {

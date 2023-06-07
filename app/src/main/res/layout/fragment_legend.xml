@@ -27,6 +27,7 @@
         tools:context=".ui.fragments.FlatStartFragment">
 
         <TextView
+            android:shadowRadius="@integer/default_item_cache_size"
             android:padding="20dp"
             android:textColor="@color/white"
             android:layout_width="match_parent"

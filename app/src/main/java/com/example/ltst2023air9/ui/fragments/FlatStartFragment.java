@@ -137,7 +137,11 @@ public class FlatStartFragment extends Fragment {
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
                             NavHostFragment.findNavController(FlatStartFragment.this)
-                                    .navigate(R.id.action_flatStartFragment_to_flatStepFragment);
+                                    .navigate(R.id.action_flatStartFragment_to_flatStartMenuFragment);
+
+//
+//                            NavHostFragment.findNavController(FlatStartFragment.this)
+//                                    .navigate(R.id.action_flatStartFragment_to_flatStepFragment);
                         }, 250);
                     }
                 });

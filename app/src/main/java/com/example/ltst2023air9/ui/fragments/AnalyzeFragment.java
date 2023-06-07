@@ -2,7 +2,10 @@ package com.example.ltst2023air9.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,5 +65,16 @@ public class AnalyzeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_analyze, container, false);
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.b_anal_button).setOnClickListener(v -> {
+
+            NavHostFragment.findNavController(AnalyzeFragment.this)
+                    .navigate(R.id.action_analyzeFragment_to_mainMenuFragment);
+
+        });
     }
 }

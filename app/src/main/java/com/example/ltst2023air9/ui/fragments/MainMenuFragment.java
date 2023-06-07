@@ -79,7 +79,7 @@ public class MainMenuFragment extends Fragment {
 
         view.findViewById(R.id.b_main_reports).setOnClickListener(v -> {
             NavHostFragment.findNavController(MainMenuFragment.this)
-                    .navigate(R.id.action_mainMenuFragment_to_reportsFragment);
+                    .navigate(R.id.action_mainMenuFragment_to_reportListFragment);
         });
 
         view.findViewById(R.id.b_main_legend).setOnClickListener(v -> {

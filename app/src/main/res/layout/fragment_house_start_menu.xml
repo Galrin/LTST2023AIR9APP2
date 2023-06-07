@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.FlatStartFragment"
     android:gravity="center"
     android:orientation="vertical">
@@ -14,18 +15,30 @@
         android:textAlignment="center"
         android:textSize="34sp" />
 
-    <EditText
-        android:id="@+id/et_house_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name" />
+<!--    <EditText-->
+<!--        android:id="@+id/et_house_name"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="text" />-->
 
-    <Button
-        android:id="@+id/b_house_save"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        app:placeholderText="ЖК Черёмушки">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:id="@+id/tiet_house_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="наименование объекта" />
+
+        <Button
+            android:id="@+id/b_house_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Продолжить" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

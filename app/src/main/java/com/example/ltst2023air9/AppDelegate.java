@@ -1,6 +1,7 @@
 package com.example.ltst2023air9;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.model.Flat;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppDelegate extends Application {
-    List<House> houses = new ArrayList<>();;
+    List<House> houses = new ArrayList<>();
 
     House currentHouse;
     Flat currentFlat;
@@ -46,17 +47,7 @@ public class AppDelegate extends Application {
 //        }
     }
 
-//    public void revalidateGroups() {
-//        checkpoints.clear();
-//        for(String fileName : getApplicationContext().fileList()) {
-//            Log.d("FILE: ", fileName);
-//            if(fileName.startsWith(".")) {
-//                checkpoints.add(new Group(fileName));
-//            }
-//        }
-//    }
     public List<Checkpoint> getCheckpoints() {
-//        revalidateGroups();
         return checkpoints;
     }
 
