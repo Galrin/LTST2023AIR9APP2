@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.application'
+    id 'realm-android'
 }
-/// TODO: increase to build 29
+
+apply plugin: "realm-android"
+
 android {
     namespace 'com.example.ltst2023air9'
     compileSdk 33
@@ -10,6 +13,7 @@ android {
         applicationId "com.example.ltst2023air9"
         minSdk 24
         targetSdk 33
+
         versionCode 1
         versionName "1.0"
 
@@ -33,6 +37,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+//    realm {
+//        syncEnabled = true
+//    }
     buildFeatures {
         viewBinding true
     }

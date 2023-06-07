@@ -78,18 +78,21 @@ public class flatStartMenuFragment extends Fragment {
 
         Button save = view.findViewById(R.id.b_flat_save);
         //EditText text = view.findViewById(R.id.et_house_name);
-        NumberPicker floor = view.findViewById(R.id.np_flat_start_foor);
-        floor.setMinValue(0);
-        floor.setMaxValue(999);
-        NumberPicker section = view.findViewById(R.id.np_flat_start_section);
-        section.setMinValue(0);
-        section.setMaxValue(30);
+        com.shawnlin.numberpicker.NumberPicker floor = view.findViewById(R.id.np_flat_start_foor);
+        floor.setMinValue(1);
+        floor.setValue(1);
+        floor.setMaxValue(35);
+
+        com.shawnlin.numberpicker.NumberPicker number = view.findViewById(R.id.np_flat_start_number);
+        number.setMinValue(1);
+        number.setValue(1);
+        number.setMaxValue(720);
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         Flat flat = appDelegate.getCurrentFlat();
         save.setOnClickListener(v -> {
 
             flat.setFloor(floor.getValue());
-            flat.setSection(section.getValue());
+            flat.setSection(number.getValue());
 //            house.setName(TextUtils.isEmpty(text.getText().toString())
 //                    ? "ЖК Черёмушки"
 //                    : text.getText().toString());

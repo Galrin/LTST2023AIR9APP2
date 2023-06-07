@@ -11,6 +11,8 @@ import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class AppDelegate extends Application {
     List<House> houses = new ArrayList<>();
 
@@ -35,6 +37,8 @@ public class AppDelegate extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Realm.init(this);
 
         tableViewModel.initCellList();
 

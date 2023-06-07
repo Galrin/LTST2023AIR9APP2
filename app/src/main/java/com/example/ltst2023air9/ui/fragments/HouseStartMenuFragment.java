@@ -19,6 +19,8 @@ import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.House;
 import com.google.android.material.textfield.TextInputEditText;
 
+import io.realm.Realm;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HouseStartMenuFragment#newInstance} factory method to
@@ -87,6 +89,9 @@ public class HouseStartMenuFragment extends Fragment {
                     ? "ЖК Черёмушки"
                     : text.getText().toString());
             //NavHostFragment.findNavController(HouseStartMenuFragment.this).popBackStack();
+
+            Realm db = Realm.getDefaultInstance();
+            //db.
 
             NavHostFragment.findNavController(HouseStartMenuFragment.this)
                     .navigate(R.id.action_houseStartMenuFragment_to_flatStartFragment);
