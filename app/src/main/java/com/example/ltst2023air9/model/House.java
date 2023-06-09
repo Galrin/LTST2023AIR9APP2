@@ -27,11 +27,11 @@ public class House implements Serializable {
         this.flats = flats;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

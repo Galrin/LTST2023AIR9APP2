@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".HouseInfoFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/efec8174"
-        android:gravity="center_vertical"
+        android:gravity="fill_vertical"
         android:orientation="vertical"
-        android:paddingTop="80dp"
-
-        tools:context=".ui.fragments.FlatStartFragment">
+        android:paddingTop="80dp">
 
         <TextView
-            android:id="@+id/tv_analyze_msg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Все точки осмотра пройдены. производим анализ..."
-            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="22sp" />
-
-        <LinearLayout
-            android:id="@+id/ll_analyze_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+            android:text="Информация об объекте:"
+            android:textAlignment="center"
+            android:textSize="28sp" />
 
-        <Button
-            android:id="@+id/b_anal_next"
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/tv_house_info_object_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Продолжить осмотр" />
-
-        <Button
-            android:id="@+id/b_anal_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="В главное меню" />
-
+            android:text="ЖК Берёзки"
+            android:textAlignment="center"
+            android:textSize="42sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textSize="80dp" />
+            android:textSize="80sp" />
+
+        <ImageButton
+            android:id="@+id/ib_house_info_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/actionbar_dark_back_icon" />
+
+        <ImageButton
+            android:id="@+id/ib_house_info_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send" />
+
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

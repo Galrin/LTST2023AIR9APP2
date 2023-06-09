@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="clip_vertical"
+            android:orientation="vertical"
+            android:paddingTop="80dp"
+
+            tools:context=".ui.fragments.FlatStartFragment">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Прототип Детертора конструировали: "
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="34sp" />
+
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:elevation="0dp"
+                app:cardBackgroundColor="#30FFFFFF"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="4dp"
+                            android:text="Дмитрий Соколов"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textFontWeight="700"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:text="Эксперт по CV"
+                            android:textAlignment="center"
+                            android:textColor="#90FFFFFF"
+                            android:textFontWeight="700" />
+                    </LinearLayout>
+
+                    <Button
+                        android:textColor="?attr/colorPrimary"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:textAlignment="center"
+                        android:text="TG: dimkoss11"/>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:elevation="0dp"
+                app:cardBackgroundColor="#30FFFFFF"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="4dp"
+                            android:text="Алексей Мокасеев"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textFontWeight="700"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:text="строительство и инновации"
+                            android:textAlignment="center"
+                            android:textColor="#90FFFFFF"
+                            android:textFontWeight="700" />
+                    </LinearLayout>
+
+                    <Button
+                        android:textColor="?attr/colorPrimary"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:textAlignment="center"
+                        android:text="TG: Mokaseev"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:elevation="0dp"
+                app:cardBackgroundColor="#30FFFFFF"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="4dp"
+                            android:text="Александр Посторонка"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textFontWeight="700"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:text="Android Разработчик"
+                            android:textAlignment="center"
+                            android:textColor="#90FFFFFF"
+                            android:textFontWeight="700" />
+                    </LinearLayout>
+
+
+                    <Button
+                        android:textColor="?attr/colorPrimary"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:textAlignment="center"
+                        android:text="TG: Ge3eR"/>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:elevation="0dp"
+                app:cardBackgroundColor="#30FFFFFF"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="4dp"
+                            android:text="Виктор
+Бордюжа"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textFontWeight="700"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="20dp"
+                            android:text="Эксперт по CV и DS"
+                            android:textAlignment="center"
+                            android:textColor="#90FFFFFF"
+                            android:textFontWeight="700" />
+                    </LinearLayout>
+
+
+                    <Button
+                        android:textColor="?attr/colorPrimary"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:textAlignment="center"
+                        android:text="TG: exceptmeplsnow"/>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ib_report_list_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="1dp"
+            android:background="@android:drawable/ic_menu_send"
+            android:contentDescription="дальше" />
+
+    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,8 @@
 package com.example.ltst2023air9.ui.ncnn;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,7 +136,10 @@ public class NCNNCameraFragment extends Fragment {
                     String msg = "Video capture succeeded: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
                     Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
-
+                    Uri outputUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                    String videoPath =  UriToString(outputUri);
+                    Log.i("Recorder", "Recorded video uri is "+ videoPath);
+                    appDelegate.getCheckpoints().get(flat.getCurrentCheckpoint()).setVideoPath(String.valueOf(((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri()));
                     // если вышли за рамки списка - обход окончен - анализ
                     // если не вышли - возврат к 'шагам обхода'
 
@@ -210,6 +216,31 @@ public class NCNNCameraFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         service.shutdown();
+    }
+
+    private String UriToString(Uri uri) {
+        try {
+            //Uri uri = data.getData();
+            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                Object t = cursor.getColumnNames();
+                // String imgNo = cursor.getString(0); // 编号
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+                String v_path = cursor.getString(column_index); // 文件路径
+                //String v_size = cursor.getString(2); // 大小
+                //String v_name = cursor.getString(3); // 文件名
+                return v_path;
+            } else {
+                //Toast.makeText(getActivity(), "Video is null", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //Toast.makeText(getActivity(), "Video is null", Toast.LENGTH_SHORT).show();
+        }
+        finally {
+            return "";
+        }
     }
 
 }

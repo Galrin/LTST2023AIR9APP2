@@ -1,23 +1,25 @@
 package com.example.ltst2023air9;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.NumberPicker;
-
 import com.example.ltst2023air9.model.Flat;
-import com.example.ltst2023air9.model.House;
-import com.example.ltst2023air9.ui.fragments.HouseStartMenuFragment;
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.ltst2023air9.model.RealmFlat;
+import com.example.ltst2023air9.model.RealmHouse;
+
+import java.util.UUID;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,12 +27,13 @@ import com.google.android.material.textfield.TextInputEditText;
  * create an instance of this fragment.
  */
 public class flatStartMenuFragment extends Fragment {
+public static final int FLAT_MAX = 720;
+public static final int FLOOR_MAX = 35;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -72,6 +75,7 @@ public class flatStartMenuFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_flat_start_menu, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -81,22 +85,44 @@ public class flatStartMenuFragment extends Fragment {
         com.shawnlin.numberpicker.NumberPicker floor = view.findViewById(R.id.np_flat_start_foor);
         floor.setMinValue(1);
         floor.setValue(1);
-        floor.setMaxValue(35);
+        floor.setMaxValue(FLOOR_MAX);
 
         com.shawnlin.numberpicker.NumberPicker number = view.findViewById(R.id.np_flat_start_number);
         number.setMinValue(1);
         number.setValue(1);
-        number.setMaxValue(720);
+        number.setMaxValue(FLAT_MAX);
+
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
         Flat flat = appDelegate.getCurrentFlat();
         save.setOnClickListener(v -> {
 
             flat.setFloor(floor.getValue());
             flat.setSection(number.getValue());
-//            house.setName(TextUtils.isEmpty(text.getText().toString())
-//                    ? "ЖК Черёмушки"
-//                    : text.getText().toString());
-            //NavHostFragment.findNavController(HouseStartMenuFragment.this).popBackStack();
+
+            Realm db = Realm.getDefaultInstance();
+
+            final String houseId = appDelegate.getCurrentRealmHouseId();
+            db.executeTransactionAsync(r -> {
+                RealmFlat realmFlat = r.createObject(RealmFlat.class, UUID.randomUUID().toString());
+                realmFlat.setFloor(floor.getValue());
+                realmFlat.setNumber(number.getValue());
+
+                //sort("startTime", Sort.DESCENDING).findFirst();
+                RealmHouse realmHouse = r.where(RealmHouse.class).equalTo("id", houseId).findFirst();
+
+                Log.i("flat start menu", "=====" );
+                Log.i("flat start menu", "ap house id "  + houseId);
+
+                if (realmHouse != null) {
+                    Log.i("flat start menu", "" + realmHouse.getName());
+
+                    realmHouse.getFlats().add(realmFlat);
+                }
+                Log.i("flat start menu", "//=====" );
+
+                appDelegate.setCurrentRealmFlatId(realmFlat.getId());
+            });
 
             NavHostFragment.findNavController(flatStartMenuFragment.this)
                     .navigate(R.id.action_flatStartMenuFragment_to_flatStepFragment);

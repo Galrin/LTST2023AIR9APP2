@@ -2,20 +2,23 @@ package com.example.ltst2023air9.model;
 
 import java.util.UUID;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.Index;
+import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
 
 @RealmClass
-public class RealmHouse extends RealmObject {
+public class RealmCheckpoint extends RealmObject {
+
     @PrimaryKey
     @Index
     private String id; // = UUID.randomUUID().toString();
 
     private String name;
-    private RealmList<RealmFlat> flats =  new RealmList<>();
+
+    private String videoPath;
 
     private float startLatitude;
     private float startLongitude;
@@ -23,8 +26,6 @@ public class RealmHouse extends RealmObject {
     private float endLatitude;
     private float endLongitude;
 
-    private int startTime;
-    private int endTime;
 
     public String getName() {
         return name;
@@ -42,11 +43,7 @@ public class RealmHouse extends RealmObject {
         this.id = id;
     }
 
-    public RealmList<RealmFlat> getFlats() {
-        return flats;
-    }
-
-    public void setFlats(RealmList<RealmFlat> flats) {
-        this.flats = flats;
-    }
+    // You can define inverse relationships.
+    @LinkingObjects("checkpoints")
+    public final RealmResults<RealmFlat> owners = null;
 }

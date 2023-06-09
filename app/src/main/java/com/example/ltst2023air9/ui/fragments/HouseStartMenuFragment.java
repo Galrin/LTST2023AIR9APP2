@@ -16,10 +16,16 @@ import android.widget.EditText;
 
 import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
+import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.model.House;
+import com.example.ltst2023air9.model.RealmCheckpoint;
+import com.example.ltst2023air9.model.RealmHouse;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.UUID;
+
 import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +42,6 @@ public class HouseStartMenuFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public HouseStartMenuFragment() {
         // Required empty public constructor
     }
@@ -82,16 +87,28 @@ public class HouseStartMenuFragment extends Fragment {
         Button save = view.findViewById(R.id.b_house_save);
         //EditText text = view.findViewById(R.id.et_house_name);
         TextInputEditText text = view.findViewById(R.id.tiet_house_name);
+
+
+
         save.setOnClickListener(v -> {
+            final String defaultName = TextUtils.isEmpty(text.getText().toString())
+                ? "ЖК Черёмушки"
+                : text.getText().toString();
             AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
             House house = appDelegate.getCurrentHouse();
-            house.setName(TextUtils.isEmpty(text.getText().toString())
-                    ? "ЖК Черёмушки"
-                    : text.getText().toString());
+            house.setName(defaultName);
             //NavHostFragment.findNavController(HouseStartMenuFragment.this).popBackStack();
 
             Realm db = Realm.getDefaultInstance();
-            //db.
+
+            db.executeTransactionAsync(r -> {
+                    RealmHouse realmHouse = r.createObject(RealmHouse.class, UUID.randomUUID().toString());
+                    realmHouse.setName(defaultName);
+                    //realmHouse.setFlats(new RealmList<>());
+
+                    appDelegate.setCurrentRealmHouseId(realmHouse.getId());
+                 });
 
             NavHostFragment.findNavController(HouseStartMenuFragment.this)
                     .navigate(R.id.action_houseStartMenuFragment_to_flatStartFragment);

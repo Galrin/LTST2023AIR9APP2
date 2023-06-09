@@ -289,7 +289,7 @@ public class NCNNHelperFragment extends Fragment {
                     //Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
 
 
-                    YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, false);
+                    YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, USE_GPU);
                     final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
 
                     if (result != null) {

@@ -14,6 +14,13 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ltst2023air9.model.Checkpoint;
+import com.example.ltst2023air9.model.RealmCheckpoint;
+
+import java.util.UUID;
+
+import io.realm.Realm;
+
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -52,7 +59,17 @@ public class SplashActivity extends AppCompatActivity {
 
         appDelegate = (AppDelegate) getApplicationContext();
 
-       // initInstanceState();
+
+        Realm db = Realm.getDefaultInstance();
+
+        db.executeTransactionAsync(r -> {
+            for(Checkpoint cp: appDelegate.getCheckpoints()) {
+
+                RealmCheckpoint checkpoint = r.createObject(RealmCheckpoint.class, UUID.randomUUID().toString());
+                checkpoint.setName(cp.getName());
+
+            } });
+
 
     }
 //

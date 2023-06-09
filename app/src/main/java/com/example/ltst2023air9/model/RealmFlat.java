@@ -2,18 +2,64 @@ package com.example.ltst2023air9.model;
 
 import java.util.UUID;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.annotations.Index;
+import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 
-public class RealmFlat  extends RealmObject {
+@RealmClass
+public class RealmFlat extends RealmObject {
 
     @PrimaryKey
-    String id = UUID.randomUUID().toString();
+    @Index
+    private String id; // = UUID.randomUUID().toString();
 
-    int currentCheckpoint = 0;
+    private int floor;
 
-    int floor;
+    private int number;
 
-    int number;
+    private RealmList<RealmCheckpoint> checkpoints =  new RealmList<>();
 
+
+    private int currentCheckpointNumber = 0;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getCurrentCheckpointNumber() {
+        return currentCheckpointNumber;
+    }
+
+    public void setCurrentCheckpointNumber(int currentCheckpointNumber) {
+        this.currentCheckpointNumber = currentCheckpointNumber;
+    }
+
+
+    // You can define inverse relationships.
+    @LinkingObjects("flats")
+    public final RealmResults<RealmHouse> owners = null;
 }

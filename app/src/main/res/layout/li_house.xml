@@ -1,34 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_margin="8dp"
-android:elevation="0dp"
-app:cardBackgroundColor="?attr/colorPrimary"
-app:cardCornerRadius="50dp"
-    android:id="@+id/li_house_layout">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/li_house_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="0dp"
+    app:cardBackgroundColor="#30FFFFFF"
+    app:cardCornerRadius="50dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:textColor="@color/white"
-            android:padding="20dp"
-            android:id="@+id/li_house_text"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:minWidth="180dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/app_name"
-            />
+            android:minHeight="60dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/li_house_text"
+
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:text="ЖК Строй"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textFontWeight="700"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+
+
         <Button
-            android:textColor="?attr/colorPrimary"
-            android:backgroundTint="@color/white"
             android:id="@+id/li_house_button"
+
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_margin="1dp"
+            android:backgroundTint="@color/white"
+            android:text="Подробнее"
             android:textAlignment="center"
-            android:text="Подробнее"/>
+            android:textColor="?attr/colorPrimary" />
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

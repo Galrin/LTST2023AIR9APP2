@@ -1,6 +1,12 @@
 package com.example.ltst2023air9.ui.fragments.reportlist;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,16 +15,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.example.ltst2023air9.AppDelegate;
+import com.example.ltst2023air9.HouseInfoFragment;
 import com.example.ltst2023air9.R;
-import com.example.ltst2023air9.ui.fragments.HouseStartMenuFragment;
+import com.example.ltst2023air9.model.RealmHouse;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +40,15 @@ public class ReportListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView mRecyclerView;
+
+    private ReportListAdapter mAdapter;
+
+    private RealmResults<RealmHouse> houses;
+    private final RealmChangeListener<RealmResults<RealmHouse>> realmChangeListener = h -> {
+        // Set the cities to the adapter only when async query is loaded.
+        // It will also be called for any future writes made to the Realm.
+        mAdapter.setData(h);
+    };
 
     public ReportListFragment() {
         // Required empty public constructor
@@ -80,10 +93,10 @@ public class ReportListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
-
+        mAdapter = new ReportListAdapter(this);//, appDelegate.getHouses()
         mRecyclerView = view.findViewById(R.id.rv_house_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new ReportListAdapter(this, appDelegate.getHouses()));
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemViewCacheSize(10);
 
@@ -93,6 +106,13 @@ public class ReportListFragment extends Fragment {
             NavHostFragment.findNavController(ReportListFragment.this)
                     .navigate(R.id.action_reportListFragment_to_mainMenuFragment);
         });
+
+        Realm db = Realm.getDefaultInstance();
+        // Obtain the cities in the Realm with asynchronous query.
+        houses = db.where(RealmHouse.class).findAllAsync();
+
+        // The RealmChangeListener will be called when the results are asynchronously loaded, and available for use.
+        houses.addChangeListener(realmChangeListener);
     }
 
 
@@ -100,6 +120,8 @@ public class ReportListFragment extends Fragment {
         Toast.makeText(getContext(), "aaa" + position, Toast.LENGTH_SHORT).show();
         Log.d("houseList", "" + position);
 
+        NavHostFragment.findNavController(ReportListFragment.this)
+                .navigate(R.id.action_reportListFragment_to_houseInfoFragment);
         //getParentFragmentManager().beginTransaction().replace(R.id.ActivityMain_fragment_container, DeviceFragment.newInstance()).commit();
 
     }
