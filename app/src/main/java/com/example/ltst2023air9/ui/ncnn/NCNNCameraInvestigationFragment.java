@@ -1,5 +1,8 @@
 package com.example.ltst2023air9.ui.ncnn;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -67,8 +70,10 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
+import com.example.ltst2023air9.YoloV5Ncnn;
 import com.example.ltst2023air9.model.Flat;
 import com.example.ltst2023air9.model.House;
+import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.ByteArrayOutputStream;
@@ -81,6 +86,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
 public class NCNNCameraInvestigationFragment extends Fragment {
+    private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
+    public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
 
     public NCNNCameraInvestigationFragment() {
         // Required empty public constructor
@@ -124,7 +131,10 @@ public class NCNNCameraInvestigationFragment extends Fragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
+            boolean ret_init = yolov5ncnn.Init(getActivity().getAssets());
+            if (!ret_init) {
+                Log.e("NCNNCameraInvestigation", "yolov5ncnn Init failed");
+            }
         }
 
         @Override
@@ -194,6 +204,12 @@ public class NCNNCameraInvestigationFragment extends Fragment {
                                 } catch (Exception e) {}
 
 
+                            YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmapBuffer, USE_GPU);
+                            final Bitmap drawBitmap = drawBoxRects(bitmapBuffer.copy(Bitmap.Config.ARGB_8888, true), result);
+
+                            if (result != null) {
+                                detectorAnalyzer.add(result);
+                            }
                                 //Bitmap bmp = previewView.getBitmap(); // ужастный вариант. скорее избавиться от него!
 
                                 /*  по скорости хорошо, но глючный кадр */
@@ -204,7 +220,7 @@ public class NCNNCameraInvestigationFragment extends Fragment {
 
                                 new Handler(Looper.getMainLooper()).post(() -> {
 
-                                    mPreviewImage.setImageBitmap(bitmapBuffer);
+                                    mPreviewImage.setImageBitmap(drawBitmap);
                                 });
                             //}
                             image.close();
@@ -243,5 +259,75 @@ public class NCNNCameraInvestigationFragment extends Fragment {
             service.shutdown();
         }
 
+
+    ////////////////////////////////////////////////
+    protected Bitmap drawBoxRects(Bitmap mutableBitmap, YoloV5Ncnn.Obj[] objects) {
+        if (objects == null) {
+            return mutableBitmap;
+        }
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint boxPaint = new Paint();
+
+        final int[] colors = new int[]{
+                Color.rgb(54, 67, 244),
+                Color.rgb(99, 30, 233),
+                Color.rgb(176, 39, 156),
+                Color.rgb(183, 58, 103),
+                Color.rgb(181, 81, 63),
+                Color.rgb(243, 150, 33),
+                Color.rgb(244, 169, 3),
+                Color.rgb(212, 188, 0),
+                Color.rgb(136, 150, 0),
+                Color.rgb(80, 175, 76),
+                Color.rgb(74, 195, 139),
+                Color.rgb(57, 220, 205),
+                Color.rgb(59, 235, 255),
+                Color.rgb(7, 193, 255),
+                Color.rgb(0, 152, 255),
+                Color.rgb(34, 87, 255),
+                Color.rgb(72, 85, 121),
+                Color.rgb(158, 158, 158),
+                Color.rgb(139, 125, 96)
+        };
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(4);
+
+        Paint textbgpaint = new Paint();
+        textbgpaint.setColor(Color.WHITE);
+        textbgpaint.setStyle(Paint.Style.FILL);
+
+        Paint textpaint = new Paint();
+        textpaint.setColor(Color.BLACK);
+        textpaint.setTextSize(26);
+        textpaint.setTextAlign(Paint.Align.LEFT);
+
+        for (int i = 0; i < objects.length; i++) {
+            paint.setColor(colors[i % 19]);
+
+            canvas.drawRect(objects[i].x, objects[i].y, objects[i].x + objects[i].w, objects[i].y + objects[i].h, paint);
+
+            // draw filled text inside image
+            {
+                String text = objects[i].label + " = " + String.format("%.1f", objects[i].prob * 100) + "%";
+
+                float text_width = textpaint.measureText(text);
+                float text_height = -textpaint.ascent() + textpaint.descent();
+
+                float x = objects[i].x;
+                float y = objects[i].y - text_height;
+                if (y < 0)
+                    y = 0;
+                if (x + text_width > mutableBitmap.getWidth())
+                    x = mutableBitmap.getWidth() - text_width;
+
+                canvas.drawRect(x, y, x + text_width, y + text_height, textbgpaint);
+
+                canvas.drawText(text, x, y - textpaint.ascent(), textpaint);
+            }
+        }
+        return mutableBitmap;
+    }
 
     }
