@@ -33,7 +33,7 @@ import io.realm.RealmList;
  */
 public class MultiReportTableFragment extends Fragment {
 
-    private static List<RealmCheckpoint> realmCheckpointList =  Collections.emptyList();
+    private static RealmList<RealmCheckpoint> realmCheckpointList = null;
     private static int selectedCheckpoint = 0;
     private TableView mTableView;
     private TextView mTextHeader;
@@ -76,7 +76,12 @@ public class MultiReportTableFragment extends Fragment {
             }
         });
         mTextHeader = view.findViewById(R.id.tv_table_header);
-        mTextHeader.setText(getActivity().getString(R.string.table_header_text) + ": " + realmCheckpointList.get(selectedCheckpoint).getName());
+        if(realmCheckpointList != null) {
+            if(realmCheckpointList.size() > 0) {
+                mTextHeader.setText(getActivity().getString(R.string.table_header_text) + ": " + realmCheckpointList.get(selectedCheckpoint).getName());
+            }
+        }
+
 
         ImageButton buttonBack = view.findViewById(R.id.b_anal_back);
         buttonBack.setOnClickListener(v -> {
