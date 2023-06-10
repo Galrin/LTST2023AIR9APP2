@@ -69,11 +69,11 @@ public class HouseInfoFragment extends Fragment {
                     .navigate(R.id.action_houseInfoFragment_to_mainMenuFragment);
         });
 
-//        view.findViewById(R.id.ib_house_info_back).setOnClickListener(v -> {
-//
-//            NavHostFragment.findNavController(HouseInfoFragment.this)
-//                    .navigate(R.id.action_houseInfoFragment_to_reportListFragment);
-//        });
+        view.findViewById(R.id.ib_house_info_back).setOnClickListener(v -> {
+
+            NavHostFragment.findNavController(HouseInfoFragment.this)
+                    .navigate(R.id.action_houseInfoFragment_to_reportListFragment);
+        });
 
         view.findViewById(R.id.b_house_info_next).setOnClickListener(v -> {
 
@@ -101,7 +101,7 @@ public class HouseInfoFragment extends Fragment {
         //Realm db = Realm.getDefaultInstance();
         // Obtain the cities in the Realm with asynchronous query.
 
-        ///TODO: добавить условие выборки квартир
+
         flats = db.where(RealmHouse.class).equalTo("id", houseId).findFirstAsync();
 
         // The RealmChangeListener will be called when the results are asynchronously loaded, and available for use.
@@ -122,8 +122,8 @@ public class HouseInfoFragment extends Fragment {
 //
 //        });
 //
-//        NavHostFragment.findNavController(HouseInfoFragment.this)
-//                .navigate(R.id.action_reportListFragment_to_houseInfoFragment);
+        NavHostFragment.findNavController(HouseInfoFragment.this)
+                .navigate(R.id.action_houseInfoFragment_to_reportsFragment);
     }
 
 

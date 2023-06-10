@@ -62,5 +62,16 @@
         android:id="@+id/toggleFlash"
         android:background="?attr/selectableItemBackgroundBorderless"/>
 
+        <ImageButton
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/ib_camera_investigation"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:enabled="false"
+            android:src="?android:attr/fingerprintAuthDrawable"
+            android:text="К анализу" />
+
 
 </RelativeLayout>

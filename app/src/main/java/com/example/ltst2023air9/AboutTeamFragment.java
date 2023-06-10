@@ -2,11 +2,16 @@ package com.example.ltst2023air9;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.ltst2023air9.ui.fragments.LegendFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +65,15 @@ public class AboutTeamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about_team, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.ib_back).setOnClickListener(v -> {
+            NavHostFragment.findNavController(AboutTeamFragment.this)
+                    .navigate(R.id.action_aboutTeamFragment_to_legendFragment);
+        });
     }
 }

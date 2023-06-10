@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:paddingLeft="20dp"
-            android:text="Квартира"
+            android:text="Кв."
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textFontWeight="700"

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_NCNNCameraFragment_to_flatStepFragment"
             app:destination="@id/flatStepFragment" />
+        <action
+            android:id="@+id/action_NCNNCameraFragment_to_NCNNCameraInvestigationFragment"
+            app:destination="@id/NCNNCameraInvestigationFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainMenuFragment"
@@ -180,6 +183,10 @@
             android:id="@+id/action_legendFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_legendFragment_to_aboutTeamFragment"
+            app:destination="@id/aboutTeamFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/NCNNCameraHelperFragment"
@@ -247,5 +254,18 @@
             android:id="@+id/action_aboutTeamFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_aboutTeamFragment_to_legendFragment"
+            app:destination="@id/legendFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/NCNNCameraInvestigationFragment"
+        android:name="com.example.ltst2023air9.ui.ncnn.NCNNCameraInvestigationFragment"
+        android:label="fragment_n_c_n_n_camera_investigation2"
+        tools:layout="@layout/fragment_n_c_n_n_camera_investigation" >
+        <action
+            android:id="@+id/action_NCNNCameraInvestigationFragment_to_NCNNCameraFragment"
+            app:destination="@id/NCNNCameraFragment" />
     </fragment>
 </navigation>

@@ -1,7 +1,9 @@
 package com.example.ltst2023air9.model;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.Index;
@@ -26,6 +28,8 @@ public class RealmCheckpoint extends RealmObject {
 
     private float endLatitude;
     private float endLongitude;
+
+    RealmList<String> metrics = new RealmList<>();
 
 
     public String getName() {
@@ -58,6 +62,14 @@ public class RealmCheckpoint extends RealmObject {
 
     public void setPointId(int pointId) {
         this.pointId = pointId;
+    }
+
+    public RealmList<String> getMetrics() {
+        return metrics;
+    }
+
+    public void setMetrics(RealmList<String> metrics) {
+        this.metrics = metrics;
     }
 
     // You can define inverse relationships.

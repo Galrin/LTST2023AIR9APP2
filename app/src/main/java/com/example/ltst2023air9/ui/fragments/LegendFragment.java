@@ -74,5 +74,14 @@ public class LegendFragment extends Fragment {
                         NavHostFragment.findNavController(LegendFragment.this)
                     .navigate(R.id.action_legendFragment_to_mainMenuFragment);
         });
+
+        view.findViewById(R.id.tv_show_our_team).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NavHostFragment.findNavController(LegendFragment.this)
+                    .navigate(R.id.action_legendFragment_to_aboutTeamFragment);
+                return false;
+            }
+        });
     }
 }
