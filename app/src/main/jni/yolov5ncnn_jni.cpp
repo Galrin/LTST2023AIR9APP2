@@ -26,10 +26,11 @@
 #include "net.h"
 #include "benchmark.h"
 
-static ncnn::UnlockedPoolAllocator g_blob_pool_allocator;
-static ncnn::PoolAllocator g_workspace_pool_allocator;
+static ncnn::UnlockedPoolAllocator g_blob_pool_allocator, cl_blob_pool_allocator;
+static ncnn::PoolAllocator g_workspace_pool_allocator, cl_worksape_pool_allocator;
 
 static ncnn::Net yolov5;
+static ncnn::Net mobilenet;
 
 class YoloV5Focus : public ncnn::Layer
 {
@@ -88,6 +89,9 @@ struct Object
     int label;
     float prob;
 };
+
+
+std::pair<float, int> classifier(JNIEnv *pEnv, jobject pJobject);
 
 static inline float intersection_area(const Object& a, const Object& b)
 {
@@ -287,11 +291,11 @@ static jfieldID wId;
 static jfieldID hId;
 static jfieldID labelId;
 static jfieldID probId;
+static jfieldID room_labelId;
+static jfieldID room_probId;
 
 
-
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
-{
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "JNI_OnLoad");
 
     ncnn::create_gpu_instance();
@@ -299,19 +303,16 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
     return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved)
-{
+JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "JNI_OnUnload");
 
     ncnn::destroy_gpu_instance();
 }
 
-
-
 // public native boolean Init(AssetManager mgr);
-JNIEXPORT jboolean JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Init(JNIEnv* env, jobject thiz, jobject assetManager)
-{
-    ncnn::Option opt;
+JNIEXPORT jboolean JNICALL
+Java_com_example_ltst2023air9_YoloV5Ncnn_Init(JNIEnv *env, jobject thiz, jobject assetManager) {
+    ncnn::Option opt, opt_clf;
     opt.lightmode = true;
     opt.num_threads = 4;
     opt.blob_allocator = &g_blob_pool_allocator;
@@ -322,28 +323,47 @@ JNIEXPORT jboolean JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Init(JNIEnv*
     if (ncnn::get_gpu_count() != 0)
         opt.use_vulkan_compute = true;
 
-    AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
+    AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
 
     yolov5.opt = opt;
+
+    opt_clf.lightmode = true;
+    opt_clf.num_threads = 4;
+    opt_clf.blob_allocator = &cl_blob_pool_allocator;
+    opt_clf.workspace_allocator = &cl_worksape_pool_allocator;
+    opt_clf.use_packing_layout = true;
+    mobilenet.opt = opt_clf;
 
     yolov5.register_custom_layer("YoloV5Focus", YoloV5Focus_layer_creator);
 
     // init param
     {
         int ret = yolov5.load_param(mgr, "yolov5s.param");
-        if (ret != 0)
-        {
+        if (ret != 0) {
             __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "load_param failed");
             return JNI_FALSE;
         }
+
+        ret = mobilenet.load_param(mgr, "mbvnet3-sim-opt.param");
+        if (ret != 0) {
+            __android_log_print(ANDROID_LOG_DEBUG, "Mobilenet", "load_param failed");
+            return JNI_FALSE;
+        }
+
+
     }
 
     // init bin
     {
         int ret = yolov5.load_model(mgr, "yolov5s.bin");
-        if (ret != 0)
-        {
+        if (ret != 0) {
             __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "load_model failed");
+            return JNI_FALSE;
+        }
+
+        ret = mobilenet.load_model(mgr, "mbvnet3-sim-opt.bin");
+        if (ret != 0) {
+            __android_log_print(ANDROID_LOG_DEBUG, "Mobilenet", "load_model failed");
             return JNI_FALSE;
         }
     }
@@ -360,15 +380,17 @@ JNIEXPORT jboolean JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Init(JNIEnv*
     hId = env->GetFieldID(objCls, "h", "F");
     labelId = env->GetFieldID(objCls, "label", "Ljava/lang/String;");
     probId = env->GetFieldID(objCls, "prob", "F");
+    room_probId = env->GetFieldID(objCls, "room_prob", "F");
+    room_labelId = env->GetFieldID(objCls, "room_label", "Ljava/lang/String;");
+
 
     return JNI_TRUE;
 }
 
 // public native Obj[] Detect(Bitmap bitmap, boolean use_gpu);
-JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(JNIEnv* env, jobject thiz, jobject bitmap, jboolean use_gpu)
-{
-    if (use_gpu == JNI_TRUE && ncnn::get_gpu_count() == 0)
-    {
+JNIEXPORT jobjectArray JNICALL
+Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(JNIEnv *env, jobject thiz, jobject bitmap, jboolean use_gpu) {
+    if (use_gpu == JNI_TRUE && ncnn::get_gpu_count() == 0) {
         return NULL;
         //return env->NewStringUTF("no vulkan capable gpu");
     }
@@ -389,15 +411,12 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
     int w = width;
     int h = height;
     float scale = 1.f;
-    if (w > h)
-    {
-        scale = (float)target_size / w;
+    if (w > h) {
+        scale = (float) target_size / w;
         w = target_size;
         h = h * scale;
-    }
-    else
-    {
-        scale = (float)target_size / h;
+    } else {
+        scale = (float) target_size / h;
         h = target_size;
         w = w * scale;
     }
@@ -409,7 +428,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
     int wpad = (w + 31) / 32 * 32 - w;
     int hpad = (h + 31) / 32 * 32 - h;
     ncnn::Mat in_pad;
-    ncnn::copy_make_border(in, in_pad, hpad / 2, hpad - hpad / 2, wpad / 2, wpad - wpad / 2, ncnn::BORDER_CONSTANT, 114.f);
+    ncnn::copy_make_border(in, in_pad, hpad / 2, hpad - hpad / 2, wpad / 2, wpad - wpad / 2,
+                           ncnn::BORDER_CONSTANT, 114.f);
 
     // yolov5
     std::vector<Object> objects;
@@ -497,8 +517,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
         int count = picked.size();
 
         objects.resize(count);
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             objects[i] = proposals[picked[i]];
 
             // adjust offset to original unpadded
@@ -508,10 +527,10 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
             float y1 = (objects[i].y + objects[i].h - (hpad / 2)) / scale;
 
             // clip
-            x0 = std::max(std::min(x0, (float)(width - 1)), 0.f);
-            y0 = std::max(std::min(y0, (float)(height - 1)), 0.f);
-            x1 = std::max(std::min(x1, (float)(width - 1)), 0.f);
-            y1 = std::max(std::min(y1, (float)(height - 1)), 0.f);
+            x0 = std::max(std::min(x0, (float) (width - 1)), 0.f);
+            y0 = std::max(std::min(y0, (float) (height - 1)), 0.f);
+            x1 = std::max(std::min(x1, (float) (width - 1)), 0.f);
+            y1 = std::max(std::min(y1, (float) (height - 1)), 0.f);
 
             objects[i].x = x0;
             objects[i].y = y0;
@@ -521,14 +540,17 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
     }
 
     // objects to Obj[]
-    static const char* class_names[] = {
-            "bathroom", "door", "doorway", "floor bad", "floor good", "radiator", "roof bad", "roof good", "sink", "socket", "toilet", "trash", "wall bad", "wall good", "window"
+    static const char *class_names[] = {
+            "bathroom", "door", "doorway", "floor bad", "floor good", "radiator", "roof bad",
+            "roof good", "sink", "socket", "toilet", "trash", "wall bad", "wall good", "window"
     };
+
+    static const char *room_cl[] = {"bath", "kitchen", "living", "street_data" };
 
     jobjectArray jObjArray = env->NewObjectArray(objects.size(), objCls, NULL);
 
-    for (size_t i=0; i<objects.size(); i++)
-    {
+    auto cl_result = classifier(env, bitmap);
+    for (size_t i = 0; i < objects.size(); i++) {
         jobject jObj = env->NewObject(objCls, constructortorId, thiz);
 
         env->SetFloatField(jObj, xId, objects[i].x);
@@ -537,6 +559,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
         env->SetFloatField(jObj, hId, objects[i].h);
         env->SetObjectField(jObj, labelId, env->NewStringUTF(class_names[objects[i].label]));
         env->SetFloatField(jObj, probId, objects[i].prob);
+
+        env->SetFloatField(jObj, room_probId, cl_result.first);
+        env->SetObjectField(jObj, room_labelId, env->NewStringUTF(room_cl[cl_result.second]));
 
         env->SetObjectArrayElement(jObjArray, i, jObj);
     }
@@ -547,6 +572,60 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_ltst2023air9_YoloV5Ncnn_Detect(J
     return jObjArray;
 }
 
+
+std::pair<int, float> classifie2r(JNIEnv *env, jobject bitmap) {
+    const int w = 128, h = 128;
+    ncnn::Mat in = ncnn::Mat::from_android_bitmap_resize(env, bitmap, ncnn::Mat::PIXEL_RGB, w, h);
+
+    const float mean_vals[3] = {123.675f, 116.28f, 103.53};
+    const float norm_vals[3] = {1.0 / 58.395, 1.0 / 57.12, 1.0 / 57.375};
+    in.substract_mean_normalize(mean_vals, norm_vals);
+
+    ncnn::Extractor ex = mobilenet.create_extractor();
+
+    ex.input("input0", in);
+
+    ncnn::Mat out;
+    ex.extract("output0", out);
+
+    std::vector<std::pair<float, int> > vec;
+    for (int j = 0; j < out.w; j++) {
+        vec.push_back(std::make_pair(out[j], j));
+    }
+    std::partial_sort(vec.begin(), vec.begin() + 1, vec.end(),
+                      std::greater<std::pair<float, int> >());
+
+    return vec[0];
+}
 }
 
+std::pair<float, int> classifier(JNIEnv *pEnv, jobject pJobject) {
+    const int w = 224, h = 224;
+    ncnn::Mat in = ncnn::Mat::from_android_bitmap_resize(pEnv, pJobject, ncnn::Mat::PIXEL_RGB, w, h);
+
+    const float mean_vals[3] = {123.675f, 116.28f, 103.53};
+    const float norm_vals[3] = {1.0 / 58.395, 1.0 / 57.12, 1.0 / 57.375};
+    in.substract_mean_normalize(mean_vals, norm_vals);
+
+    ncnn::Extractor ex = mobilenet.create_extractor();
+
+    ex.input("input0", in);
+
+    ncnn::Mat out;
+    ex.extract("output0", out);
+
+    double s = 0;
+    std::vector<std::pair<float, int> > vec;
+
+    for (int j = 0; j < out.w; j++)
+    {
+        s+= exp(out[j]);
+    }
+    for (int j = 0; j < out.w; j++) {
+        vec.push_back(std::make_pair(exp(out[j])/s, j));
+    }
+    std::partial_sort(vec.begin(), vec.begin() + 1, vec.end(),
+                      std::greater<std::pair<float, int> >());
+    return vec[0];
+}
 
