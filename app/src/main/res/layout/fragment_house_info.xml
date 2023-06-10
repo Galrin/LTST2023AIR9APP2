@@ -1,93 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".HouseInfoFragment">
-
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/efec8174"
-        android:gravity="fill_vertical"
-        android:orientation="vertical"
-        android:paddingTop="80dp">
+        android:gravity="top"
+        android:orientation="vertical"/>
+<LinearLayout
+    android:layout_marginTop="80dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_house_info_object_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Информация об объекте:"
+            android:layout_weight="2"
+            android:text="ЖК Берёзки"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:textSize="42sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/b_house_info_next"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_weight="1"
+            android:text="Продолжить осмотр"
+            android:textColor="@color/white" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="5dp"><TextView android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Всего квартир"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+        <TextView android:background="@color/white"
 
-            <TextView
-                android:id="@+id/tv_house_info_object_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="ЖК Берёзки"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="42sp" />
-
-            <Button
-                android:id="@+id/b_house_info_next"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Продолжить осмотр"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/tv_house_info_object_flat_count"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="22"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/colorAccent"
             android:textSize="22sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAlignment="center"
-            android:textSize="80sp" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_flat_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="80sp" />
 
-    <ImageButton
-        android:id="@+id/ib_house_info_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="start"
-        android:src="@drawable/actionbar_dark_back_icon" />
 
-    <ImageButton
-        android:id="@+id/ib_house_info_home"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:src="@android:drawable/ic_menu_send" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_flat_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>
+
+
+<ImageButton
+
+    android:id="@+id/ib_house_info_home"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    android:layout_margin="1dp"
+    android:background="@android:drawable/ic_menu_send"
+    android:contentDescription="дальше" />
+
+</FrameLayout>

@@ -140,7 +140,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportsFragment"
-        android:name="com.example.ltst2023air9.ui.fragments.ReportsFragment"
+        android:name="com.example.ltst2023air9.ui.fragments.ReportTableFragment"
         android:label="fragment_reports"
         tools:layout="@layout/fragment_reports" >
         <action
@@ -232,6 +232,10 @@
         <action
             android:id="@+id/action_houseInfoFragment_to_flatStartFragment"
             app:destination="@id/flatStartFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_houseInfoFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment"
             app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment

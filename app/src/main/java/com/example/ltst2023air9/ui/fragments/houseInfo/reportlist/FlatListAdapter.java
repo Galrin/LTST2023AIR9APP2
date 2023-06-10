@@ -61,8 +61,8 @@ public class FlatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return -1;
     }
 
-    public void onRecyclerViewItemClick(int position) {
-        fragment.onRecyclerViewItemClick(position);
+    public void onRecyclerViewItemClick(int position, RealmFlat realmFlat) {
+        fragment.onRecyclerViewItemClick(position, realmFlat);
     }
 
 }

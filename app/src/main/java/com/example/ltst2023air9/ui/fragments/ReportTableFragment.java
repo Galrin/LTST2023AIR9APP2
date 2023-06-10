@@ -10,7 +10,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.evrencoskun.tableview.TableView;
@@ -21,49 +20,24 @@ import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ReportsFragment#newInstance} factory method to
+ * Use the {@link ReportTableFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReportsFragment extends Fragment {
+public class ReportTableFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private TableView mTableView;
-    public ReportsFragment() {
+    public ReportTableFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReportsFragment newInstance(String param1, String param2) {
-        ReportsFragment fragment = new ReportsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+    public static ReportTableFragment newInstance(String param1, String param2) {
+        ReportTableFragment fragment = new ReportTableFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -83,7 +57,7 @@ public class ReportsFragment extends Fragment {
         buttonBack.setOnClickListener(v -> {
             appDelegate.getTableViewModel().reinitCellList();
 
-            NavHostFragment.findNavController(ReportsFragment.this)
+            NavHostFragment.findNavController(ReportTableFragment.this)
                     .navigate(R.id.action_reportsFragment_to_mainMenuFragment);
         });
         mTableView = view.findViewById(R.id.tableview);

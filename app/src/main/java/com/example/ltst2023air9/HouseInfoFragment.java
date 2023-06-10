@@ -69,11 +69,11 @@ public class HouseInfoFragment extends Fragment {
                     .navigate(R.id.action_houseInfoFragment_to_mainMenuFragment);
         });
 
-        view.findViewById(R.id.ib_house_info_back).setOnClickListener(v -> {
-
-            NavHostFragment.findNavController(HouseInfoFragment.this)
-                    .navigate(R.id.action_houseInfoFragment_to_reportListFragment);
-        });
+//        view.findViewById(R.id.ib_house_info_back).setOnClickListener(v -> {
+//
+//            NavHostFragment.findNavController(HouseInfoFragment.this)
+//                    .navigate(R.id.action_houseInfoFragment_to_reportListFragment);
+//        });
 
         view.findViewById(R.id.b_house_info_next).setOnClickListener(v -> {
 
@@ -112,11 +112,18 @@ public class HouseInfoFragment extends Fragment {
     }
 
 
-    public void onRecyclerViewItemClick(int position) {
+    public void onRecyclerViewItemClick(int position, RealmFlat realmFlat) {
         Log.d("flatList", "position " + position);
 
-        NavHostFragment.findNavController(HouseInfoFragment.this)
-                .navigate(R.id.action_reportListFragment_to_houseInfoFragment);
+        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+        appDelegate.setCurrentRealmFlatId(realmFlat.getId());
+//        Realm db = Realm.getDefaultInstance();
+//        db.executeTransactionAsync(r -> {
+//
+//        });
+//
+//        NavHostFragment.findNavController(HouseInfoFragment.this)
+//                .navigate(R.id.action_reportListFragment_to_houseInfoFragment);
     }
 
 

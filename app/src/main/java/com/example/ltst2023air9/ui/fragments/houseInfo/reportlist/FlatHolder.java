@@ -48,7 +48,7 @@ public class FlatHolder extends RecyclerView.ViewHolder
                 Log.i("List onClick", "flat id " + realmFlat.getId());
                 Log.i("List onClick", "flat number " + realmFlat.getNumber());
 
-                mAdapter.onRecyclerViewItemClick(getAdapterPosition());
+                mAdapter.onRecyclerViewItemClick(getAdapterPosition(), realmFlat);
                 // getLayoutPosition() - позиция на вьюшке?
                 // getAdapterPosition() - позиция в списке?
             }
