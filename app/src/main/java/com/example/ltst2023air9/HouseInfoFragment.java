@@ -5,70 +5,45 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ltst2023air9.model.RealmFlat;
 import com.example.ltst2023air9.model.RealmHouse;
+import com.example.ltst2023air9.ui.fragments.houseInfo.reportlist.FlatListAdapter;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmResults;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HouseInfoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class HouseInfoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private TextView mTextObjectName;
     private TextView mTextObjectFlatCount;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public HouseInfoFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HouseInfoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HouseInfoFragment newInstance(String param1, String param2) {
-        HouseInfoFragment fragment = new HouseInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private RecyclerView mRecyclerView;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_house_info, container, false);
-    }
+    private FlatListAdapter mAdapter;
+
+    private RealmHouse flats;
+
+//    private final RealmChangeListener<RealmResults<RealmHouse>> realmChangeListener = h -> {
+//        // Set the cities to the adapter only when async query is loaded.
+//        // It will also be called for any future writes made to the Realm.
+//        h.get
+//        mAdapter.setData(h);
+//    };
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -76,8 +51,6 @@ public class HouseInfoFragment extends Fragment {
 
         mTextObjectName = view.findViewById(R.id.tv_house_info_object_name);
         mTextObjectFlatCount = view.findViewById(R.id.tv_house_info_object_flat_count);
-
-
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         final String houseId = appDelegate.getCurrentRealmHouseId();
@@ -107,5 +80,63 @@ public class HouseInfoFragment extends Fragment {
             NavHostFragment.findNavController(HouseInfoFragment.this)
                     .navigate(R.id.action_houseInfoFragment_to_flatStartFragment);
         });
+
+
+
+        //AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+        mAdapter = new FlatListAdapter(this);//, appDelegate.getHouses()
+        mRecyclerView = view.findViewById(R.id.rv_flat_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemViewCacheSize(10);
+
+//        ImageButton imageButton = view.findViewById(R.id.ib_report_list_back);
+//        imageButton.setOnClickListener(v -> {
+//
+//            NavHostFragment.findNavController(HouseInfoFragment.this)
+//                    .navigate(R.id.action_reportListFragment_to_mainMenuFragment);
+//        });
+
+        //Realm db = Realm.getDefaultInstance();
+        // Obtain the cities in the Realm with asynchronous query.
+
+        ///TODO: добавить условие выборки квартир
+        flats = db.where(RealmHouse.class).equalTo("id", houseId).findFirstAsync();
+
+        // The RealmChangeListener will be called when the results are asynchronously loaded, and available for use.
+        RealmChangeListener<RealmHouse> realmChangeListener = realmHouse -> {
+            mAdapter.setData(realmHouse.getFlats());
+        };
+        flats.addChangeListener(realmChangeListener);
+    }
+
+
+    public void onRecyclerViewItemClick(int position) {
+        Log.d("flatList", "position " + position);
+
+        NavHostFragment.findNavController(HouseInfoFragment.this)
+                .navigate(R.id.action_reportListFragment_to_houseInfoFragment);
+    }
+
+
+        public HouseInfoFragment() {
+        // Required empty public constructor
+    }
+
+    public static HouseInfoFragment newInstance(String param1, String param2) {
+        return new HouseInfoFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_house_info, container, false);
     }
 }
