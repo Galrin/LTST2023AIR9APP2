@@ -5,14 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -25,15 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.YoloV5Ncnn;
-import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.model.RealmCheckpoint;
 import com.example.ltst2023air9.model.RealmFlat;
 import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
-import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -50,10 +48,10 @@ public class AnalyzeFragment extends Fragment {
 
     public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
     private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
-    LinearLayout mRootLayout;
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     protected long videoCurFrameLoc = 0;
     protected float videoSpeed = 5.0f;
+    LinearLayout mRootLayout;
     FFmpegMediaMetadataRetriever mmr;
 
 
@@ -109,7 +107,7 @@ public class AnalyzeFragment extends Fragment {
         db.executeTransactionAsync(r -> {
             RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
             if (realmFlat != null) {
-                for (RealmCheckpoint rcp: realmFlat.getCheckpoints()) {
+                for (RealmCheckpoint rcp : realmFlat.getCheckpoints()) {
 
                     LinearLayout linearLayout = new LinearLayout(getActivity());
                     linearLayout.setPadding(10, 10, 10, 10);
@@ -117,6 +115,8 @@ public class AnalyzeFragment extends Fragment {
                     linearLayout.setGravity(Gravity.CENTER_VERTICAL);
                     ProgressBar progressBar = new ProgressBar(getActivity());
                     progressBar.setProgress(4, true);
+                    final int vid = View.generateViewId();
+                    progressBar.setId(vid);
                     progressBar.setMax(100);
 
                     TextView textView = new TextView(getActivity());
@@ -131,7 +131,7 @@ public class AnalyzeFragment extends Fragment {
 
                     new Handler(Looper.getMainLooper()).post(() -> mRootLayout.addView(linearLayout));
 
-                   // detectOnVideo(rcp.getVideoPath());
+                    detectOnVideo(rcp.getVideoPath(), rcp.getId(), vid);
                 }
             }
         });
@@ -139,50 +139,42 @@ public class AnalyzeFragment extends Fragment {
     }
 
 
+    public void detectOnVideo(final String path, final String checkpointId, final int vid) {
 
-    public void detectOnVideo(final String path) {
-//        if (isRunning.get()) {
-//            //Toast.makeText(AnalyzeFragment.this.getActivity(), "Video is running", Toast.LENGTH_SHORT).show();
-//            Log.i("detectOnVideo", "allready running");
-//            return;
-//        }
-        //isRunning.set(true);
-
-        //Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
-        //sbVideo.setVisibility(View.VISIBLE);
-        //sbVideoSpeed.setVisibility(View.VISIBLE);
+        detectorAnalyzer.clear();
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                detectorAnalyzer.clear();
-
-                mmr = new FFmpegMediaMetadataRetriever();
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 
                 mmr.setDataSource(path);
-                String dur = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
-                String sfps = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
+
+                int numFrames = Integer.parseInt(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+
+                String dur = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
+                //String sfps = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
 //                String sWidth = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);  // w
 //                String sHeight = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);  // h
-                String rota = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
+                String rota = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
                 int duration = Integer.parseInt(dur);
-                float fps = Float.parseFloat(sfps);
+                //float fps = Float.parseFloat(sfps);
                 float rotate = 0;
                 if (rota != null) {
                     rotate = Float.parseFloat(rota);
                 }
                 //sbVideo.setMax(duration * 1000);
-                float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
+                //float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 videoCurFrameLoc = 0;
 
                 Handler handler = new Handler(Looper.getMainLooper());
                 AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-                while (isRunning.get() && (videoCurFrameLoc) < (duration * 1000L)) {
-                    videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
+                for (int i = 0; i < numFrames; i++) {
+
+                    //videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
                     //sbVideo.setProgress((int) videoCurFrameLoc);
-                    final Bitmap b = mmr.getFrameAtTime(videoCurFrameLoc, FFmpegMediaMetadataRetriever.OPTION_CLOSEST_SYNC );
+                    final Bitmap b = mmr.getFrameAtIndex(i);//getFrameAtTime(videoCurFrameLoc, MediaMetadataRetriever.OPTION_CLOSEST_SYNC );
                     if (b == null) {
                         continue;
                     }
@@ -199,42 +191,52 @@ public class AnalyzeFragment extends Fragment {
 
 
                     YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, USE_GPU);
-                    //final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
+                    final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
 
                     if (result != null) {
                         detectorAnalyzer.add(result);
                     }
 
 
-//                    //showResultOnUI();
-//                    handler.post(() -> {
-//                        mImageView.setImageBitmap(drawBitmap);
-//                    });
-                    frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
+                    //showResultOnUI();
+                    try {
+                        Thread.sleep(3); // 30 fps :D
+                    } catch (InterruptedException e) {
 
-                    //appDelegate.getTableViewModel().updateRow(11, "hello % for..");
+                    }
                 }
-                mmr.release();
-                ArrayList<String> metrics = detectorAnalyzer.detect();
-                int row = 0;
-                for (String val : metrics) {
-                    appDelegate.getTableViewModel().updateRow(row, val);
-                    row += 1;
+                try {
+                    mmr.release();
+                } catch (IOException e) {
+
                 }
+                final ArrayList<String> metrics = detectorAnalyzer.detect();
 
+                Realm db = Realm.getDefaultInstance();
+                db.executeTransactionAsync(realm -> {
+                    RealmCheckpoint realmCheckpoint = realm.where(RealmCheckpoint.class).equalTo("id", checkpointId).findFirst();
+                    if (realmCheckpoint != null) {
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //sbVideo.setVisibility(View.GONE);
-                            //sbVideoSpeed.setVisibility(View.GONE);
-                           // anal.setEnabled(true);
-                            Log.i("Investigate", "end video " + path);
-                            //Toast.makeText(AnalyzeFragment.this.getActivity(), "Video end!", Toast.LENGTH_LONG).show();
+                        int row = 0;
+                        for (String val : metrics) {
+                            //appDelegate.getTableViewModel().updateRow(row, val);
+                            realmCheckpoint.getMetrics().add(val);
+                            row += 1;
                         }
-                    });
+                    }
+                });
 
-                //isRunning.set(false);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+//
+//                        ProgressBar progressBar = getActivity().findViewById(vid);
+//                        progressBar.setIndeterminate(false);
+//                        progressBar.setProgressDrawable(getActivity().getDrawable(R.drawable.ic_happy));
+                        Log.i("videoend", "videoend" + checkpointId + " " + vid);
+                    }
+                });
+
             }
         }, "video detect");
         thread.start();

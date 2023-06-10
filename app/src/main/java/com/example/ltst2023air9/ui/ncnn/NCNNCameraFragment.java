@@ -127,6 +127,12 @@ public class NCNNCameraFragment extends Fragment {
             Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
 
         });
+
+        ImageButton cameraInvestigation = view.findViewById(R.id.ib_camera_investigation);
+        cameraInvestigation.setOnClickListener(v -> {
+            NavHostFragment.findNavController(NCNNCameraFragment.this)
+                    .navigate(R.id.action_NCNNCameraFragment_to_NCNNCameraInvestigationFragment);
+        });
     }
 
     @Override

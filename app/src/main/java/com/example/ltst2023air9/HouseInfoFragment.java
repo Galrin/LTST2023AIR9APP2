@@ -123,7 +123,7 @@ public class HouseInfoFragment extends Fragment {
 //        });
 //
         NavHostFragment.findNavController(HouseInfoFragment.this)
-                .navigate(R.id.action_houseInfoFragment_to_reportsFragment);
+                .navigate(R.id.action_houseInfoFragment_to_multiReportTableFragment);
     }
 
 

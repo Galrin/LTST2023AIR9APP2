@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -133,7 +134,8 @@ public class NCNNCameraInvestigationFragment extends Fragment {
             mPreviewImage = view.findViewById(R.id.iv_prev_detector);
             ImageButton cameraInvestigation = view.findViewById(R.id.ib_camera_investigation);
             cameraInvestigation.setOnClickListener(v -> {
-
+                NavHostFragment.findNavController(NCNNCameraInvestigationFragment.this)
+                        .navigate(R.id.action_NCNNCameraInvestigationFragment_to_NCNNCameraFragment);
             });
 
 
@@ -159,7 +161,7 @@ public class NCNNCameraInvestigationFragment extends Fragment {
                 try {
                     ProcessCameraProvider cameraProvider = processCameraProvider.get();
                     Preview preview = new Preview.Builder().build();
-                    preview.setSurfaceProvider(previewView.getSurfaceProvider());
+                    //preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
                     Recorder recorder = new Recorder.Builder()
                             .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
@@ -173,7 +175,7 @@ public class NCNNCameraInvestigationFragment extends Fragment {
 
                     ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                             .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                            .setTargetRotation(previewView.getDisplay().getRotation())
+                            //.setTargetRotation(Surface.ROTATION_180)
                             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                             //.setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)

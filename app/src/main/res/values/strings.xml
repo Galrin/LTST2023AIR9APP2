@@ -35,6 +35,7 @@
     <string name="scroll_to_row_position">Scroll to 5. row position</string>
     <string name="show_hide_the_column">Showing / Hiding 1. column</string>
     <string name="table_pagination_details">Page %s, showing items %s - %s.</string>
+    <string name="table_header_text">Анализ данных</string>
 
     <string-array name="moods">
         <item />
