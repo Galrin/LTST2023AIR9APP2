@@ -1,18 +1,18 @@
 package com.example.ltst2023air9;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ltst2023air9.databinding.ActivityMainBinding;
 import com.example.ltst2023air9.model.RealmCheckpoint;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.WindowManager;
+import com.example.ltst2023air9.model.RealmFlat;
+import com.example.ltst2023air9.model.RealmHouse;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +31,17 @@ public class MainActivity extends AppCompatActivity {
 
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
-            RealmResults<RealmCheckpoint> all = r.where(RealmCheckpoint.class).findAll();
-            for (RealmCheckpoint rcp : all) {
-                Log.d("mainactivity", "to realm added:" + rcp.getId() + " " + rcp.getName());
+            RealmResults<RealmHouse> allRealmHouses = r.where(RealmHouse.class).findAll();
+            for (RealmHouse rh : allRealmHouses) {
+                Log.d("realm", "RealmHouse:" + rh.getId() + " " + rh.getName());
+            }
+            RealmResults<RealmFlat> allRealmFlats = r.where(RealmFlat.class).findAll();
+            for (RealmFlat rf : allRealmFlats) {
+                Log.d("realm", "RealmFlat:" + rf.getId() + " " + rf.getNumber());
+            }
+            RealmResults<RealmCheckpoint> allRealmCp = r.where(RealmCheckpoint.class).findAll();
+            for (RealmCheckpoint rcp : allRealmCp) {
+                Log.d("realm", "RealmCheckpoint:" + rcp.getId() + " " + rcp.getName());
             }
         });
     }

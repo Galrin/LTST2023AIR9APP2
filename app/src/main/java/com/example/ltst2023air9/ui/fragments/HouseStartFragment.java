@@ -114,29 +114,11 @@ public class HouseStartFragment extends Fragment {
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);      // This call is optional
 
-
-                        ///
-                        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
-
-                        List<House> houses = appDelegate.getHouses();
-
-                        House house = new House();
-                        houses.add(house);
-
-                        Log.d("House uuid: ", house.getUuid());
-
-                        appDelegate.setCurrentHouse(house);
-                        Log.d("House uuid: ", house.getUuid());
-                        ///
-
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//
-//                            NavHostFragment.findNavController(HouseStartFragment.this)
-//                                    .navigate(R.id.action_houseStartFragment_to_flatStartFragment);
+
                             NavHostFragment.findNavController(HouseStartFragment.this)
                                     .navigate(R.id.action_houseStartFragment_to_houseStartMenuFragment);
                         }, 250);
-                        //              doSomething();
                     }
                 });
     }

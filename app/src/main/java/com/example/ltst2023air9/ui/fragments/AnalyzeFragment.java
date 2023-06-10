@@ -111,8 +111,8 @@ public class AnalyzeFragment extends Fragment {
 
         view.findViewById(R.id.b_anal_next).setOnClickListener(v -> {
             // переход к кнопке старт комнаты
-//            NavHostFragment.findNavController(AnalyzeFragment.this)
-//                    .navigate(R.id.action_analyzeFragment_to_flatStartFragment);
+            NavHostFragment.findNavController(AnalyzeFragment.this)
+                    .navigate(R.id.action_analyzeFragment_to_flatStartFragment);
 
         });
         view.findViewById(R.id.b_anal_button).setOnClickListener(v -> {
@@ -149,7 +149,7 @@ public class AnalyzeFragment extends Fragment {
 
             mRootLayout.addView(linearLayout);
 
-            detectOnVideo(cp.getVideoPath());
+            //detectOnVideo(cp.getVideoPath());
         }
 
     }

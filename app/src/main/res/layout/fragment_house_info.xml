@@ -33,6 +33,14 @@
             android:text="ЖК Берёзки"
             android:textAlignment="center"
             android:textSize="42sp" />
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/tv_house_info_object_flat_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="22"
+            android:textAlignment="center"
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -40,7 +48,13 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="80sp" />
-
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/b_house_info_next"
+            android:textColor="@color/white"
+            android:text="Продолжить осмотр"
+            />
         <ImageButton
             android:id="@+id/ib_house_info_back"
             android:layout_width="match_parent"

@@ -39,6 +39,8 @@ import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.Flat;
 import com.example.ltst2023air9.model.House;
+import com.example.ltst2023air9.model.RealmFlat;
+import com.example.ltst2023air9.model.RealmHouse;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +48,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import io.realm.Realm;
 
 public class NCNNCameraFragment extends Fragment {
 
@@ -56,6 +60,11 @@ public class NCNNCameraFragment extends Fragment {
     PreviewView previewView;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
 
+//    RealmHouse mRealmHouse;
+//    RealmFlat mRealmFlat;
+    private String currentRealmHouseId;
+    private String currentRealmFlatId;
+    private int mCurrentCheckpointNumber;
 
     public NCNNCameraFragment() {
         // Required empty public constructor
@@ -82,6 +91,12 @@ public class NCNNCameraFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+//        House house = appDelegate.getCurrentHouse();
+//        Flat flat = appDelegate.getCurrentFlat();
+        currentRealmHouseId = appDelegate.getCurrentRealmHouseId();
+        currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
+
 
         previewView = view.findViewById(R.id.viewFinder);
         capture = view.findViewById(R.id.capture);
@@ -94,6 +109,20 @@ public class NCNNCameraFragment extends Fragment {
 
 
         service = Executors.newSingleThreadExecutor();
+
+        Realm db = Realm.getDefaultInstance();
+        db.executeTransactionAsync(r -> {
+            Log.i("RECORDERCAMERAFRAGMENT", "------------------");
+
+            RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+            if (realmFlat != null) {
+                mCurrentCheckpointNumber = realmFlat.getCurrentCheckpointNumber();
+                Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
+                Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint: " + mCurrentCheckpointNumber);
+            }
+            Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
+
+        });
     }
 
     @Override
@@ -114,11 +143,8 @@ public class NCNNCameraFragment extends Fragment {
         }
 
         //String name = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.getDefault()).format(System.currentTimeMillis());
-        AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
-        House house = appDelegate.getCurrentHouse();
-        Flat flat = appDelegate.getCurrentFlat();
 
-        String name = house.getUuid() + "_" + flat.getUuid() + "_" + String.valueOf(flat.getCurrentCheckpoint());
+        String name = currentRealmHouseId + "_" + currentRealmFlatId + "_" + String.valueOf(mCurrentCheckpointNumber);
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
@@ -139,20 +165,57 @@ public class NCNNCameraFragment extends Fragment {
                     Uri outputUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
                     String videoPath =  UriToString(outputUri);
                     Log.i("Recorder", "Recorded video uri is "+ videoPath);
-                    appDelegate.getCheckpoints().get(flat.getCurrentCheckpoint()).setVideoPath(String.valueOf(((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri()));
+
+
+                    final AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
+
+                    final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
+
+
+                    //appDelegate.getCheckpoints().get(flat.getCurrentCheckpoint()).setVideoPath(String.valueOf(((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri()));
                     // если вышли за рамки списка - обход окончен - анализ
                     // если не вышли - возврат к 'шагам обхода'
 
-                    Log.d("camerafragment", "flat.getCurrentCheckpoint(" + flat.getCurrentCheckpoint() + ")");
+                    ///TODO: добавить к RealmCheckpoint Global Checkpoint List id
+                    Log.d("camerafragment", "flat.getCurrentCheckpoint(" + mCurrentCheckpointNumber + ")");
                     Log.d("camerafragment", "appDelegate.getCheckpoints().size(" + appDelegate.getCheckpoints().size() + ")");
-                    if( flat.getCurrentCheckpoint() < ( appDelegate.getCheckpoints().size() -1 ) ) {
+
+                    Realm db = Realm.getDefaultInstance();
+
+                    if( mCurrentCheckpointNumber < ( appDelegate.getCheckpoints().size() -1 ) ) {
                         /// GOTO: STEP REPEAT
-                        flat.setCurrentCheckpoint(flat.getCurrentCheckpoint() + 1);
+                        //flat.setCurrentCheckpoint(flat.getCurrentCheckpoint() + 1);
+
+                        db.executeTransactionAsync(r -> {
+                            Log.i("RECORDERCAMERAFRAGMENT", "GOTO: STEP REPEAT------------------");
+
+                            RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+                            if (realmFlat != null) {
+                                realmFlat.setCurrentCheckpointNumber(mCurrentCheckpointNumber + 1);
+                                Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
+                                Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint after++: " + realmFlat.getCurrentCheckpointNumber());
+                            }
+                            Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
+
+                        });
+
                         NavHostFragment.findNavController(NCNNCameraFragment.this)
                                 .navigate(R.id.action_NCNNCameraFragment_to_flatStepFragment);
                     } else { /// GOTO: ANAL
-                        flat.setCurrentCheckpoint( 0 );
+                        //flat.setCurrentCheckpoint( 0 );
+                    db.executeTransactionAsync(r -> {
+                        Log.i("RECORDERCAMERAFRAGMENT", "GOTO: ANAL------------------");
 
+                        RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+                        if (realmFlat != null) {
+                            realmFlat.setCurrentCheckpointNumber(0);
+                            Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
+                            Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint after reset: " + realmFlat.getCurrentCheckpointNumber());
+                        }
+                        Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
+
+                    });
                         NavHostFragment.findNavController(NCNNCameraFragment.this)
                                 .navigate(R.id.action_NCNNCameraFragment_to_analyzeFragment);
                     }

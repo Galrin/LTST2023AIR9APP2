@@ -110,22 +110,22 @@ public class NCNNCameraActivity extends AppCompatActivity {
                     String msg = "Video capture succeeded: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
                     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
-                    AppDelegate appDelegate = (AppDelegate) getApplicationContext();
-                    Flat flat = appDelegate.getCurrentFlat();
-
-
-                    // если вышли за рамки списка - обход окончен - анализ
-                    // если не вышли - возврат к 'шагам обхода'
-
-                    if(appDelegate.getCheckpoints().size() >= flat.getCurrentCheckpoint() ) {
-//                        /// GOTO: STEP REPEAT
-//                        NavHostFragment.findNavController(NCNNCameraActivity.this)
-//                                .navigate(R.id.action_flatStartFragment_to_flatStepFragment);
-                    } else {
-//                        /// GOTO: ANAL
-//                        NavHostFragment.findNavController(NCNNCameraActivity.this)
-//                                .navigate(R.id.action_cameraFragment_to_analyzeFragment);
-                    }
+//                    AppDelegate appDelegate = (AppDelegate) getApplicationContext();
+//                    Flat flat = appDelegate.getCurrentFlat();
+//
+//
+//                    // если вышли за рамки списка - обход окончен - анализ
+//                    // если не вышли - возврат к 'шагам обхода'
+//
+//                    if(appDelegate.getCheckpoints().size() >= flat.getCurrentCheckpoint() ) {
+////                        /// GOTO: STEP REPEAT
+////                        NavHostFragment.findNavController(NCNNCameraActivity.this)
+////                                .navigate(R.id.action_flatStartFragment_to_flatStepFragment);
+//                    } else {
+////                        /// GOTO: ANAL
+////                        NavHostFragment.findNavController(NCNNCameraActivity.this)
+////                                .navigate(R.id.action_cameraFragment_to_analyzeFragment);
+//                    }
                 } else {
                     recording.close();
                     recording = null;

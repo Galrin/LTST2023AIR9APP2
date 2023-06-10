@@ -96,8 +96,7 @@ public class HouseStartMenuFragment extends Fragment {
                 : text.getText().toString();
             AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-            House house = appDelegate.getCurrentHouse();
-            house.setName(defaultName);
+
             //NavHostFragment.findNavController(HouseStartMenuFragment.this).popBackStack();
 
             Realm db = Realm.getDefaultInstance();

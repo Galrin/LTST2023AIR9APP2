@@ -1,15 +1,7 @@
 package com.example.ltst2023air9.ui.fragments;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -17,60 +9,56 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.ltst2023air9.AppDelegate;
-import com.example.ltst2023air9.MainActivity;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.Checkpoint;
-import com.example.ltst2023air9.model.Flat;
-import com.example.ltst2023air9.ui.ncnn.NCNNCameraActivity;
+import com.example.ltst2023air9.model.RealmFlat;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FlatStepFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import io.realm.Realm;
+
+
 public class FlatStepFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int mCurrentCheckpointNumber = 0;
 
     public FlatStepFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FlatStepFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FlatStepFragment newInstance(String param1, String param2) {
         FlatStepFragment fragment = new FlatStepFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        final AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+
+
+        final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
+
+        Realm db = Realm.getDefaultInstance();
+        db.executeTransactionAsync(r -> {
+            Log.i("FlatStep", "------------------");
+
+            RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+            if (realmFlat != null) {
+                mCurrentCheckpointNumber = realmFlat.getCurrentCheckpointNumber();
+                Log.i("FlatStep", "current RealmFlatId: " + realmFlat.getId());
+                Log.i("FlatStep", "current GLOBAL checkpoint: " + mCurrentCheckpointNumber);
+            }
+            Log.i("FlatStep", "//------------------");
+
+        });
     }
 
     @Override
@@ -83,8 +71,10 @@ public class FlatStepFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initHelper(view);
 
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            initHelper(view);
+        }, 300);
 
 
         view.findViewById(R.id.flat_step_fab).setOnClickListener(v -> {
@@ -94,20 +84,20 @@ public class FlatStepFragment extends Fragment {
         });
 
 
-        AppDelegate appDelegate = (AppDelegate) view.getContext().getApplicationContext();
-        Flat flat = appDelegate.getCurrentFlat();
-
-        Log.d("step", "flat uuid: " + flat.getUuid());
-        Log.d("step", "flat section: " + flat.getSection());
-        Log.d("step", "flat floor: " + flat.getFloor());
+//        Flat flat = appDelegate.getCurrentFlat();
+//
+//        Log.d("step", "flat uuid: " + flat.getUuid());
+//        Log.d("step", "flat section: " + flat.getSection());
+//        Log.d("step", "flat floor: " + flat.getFloor());
 
     }
 
     private void initHelper(View view) {
 
         AppDelegate appDelegate = (AppDelegate) view.getContext().getApplicationContext();
-        Flat flat = appDelegate.getCurrentFlat();
-        Checkpoint checkpoint = appDelegate.getCheckpoints().get(flat.getCurrentCheckpoint());
+//        Flat flat = appDelegate.getCurrentFlat();
+
+        Checkpoint checkpoint = appDelegate.getCheckpoints().get(mCurrentCheckpointNumber);
 
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
                 TapTarget.forView(view.findViewById(R.id.flat_step_fab),
@@ -146,7 +136,7 @@ public class FlatStepFragment extends Fragment {
 
                             NavHostFragment.findNavController(FlatStepFragment.this)
                                     .navigate(R.id.action_flatStepFragment_to_NCNNCameraFragment);
-                            }, 250);
+                        }, 250);
                     }
                 });
     }

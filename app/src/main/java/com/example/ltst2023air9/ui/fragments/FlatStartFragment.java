@@ -120,18 +120,18 @@ public class FlatStartFragment extends Fragment {
                         ///
                         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-                        House house = appDelegate.getCurrentHouse();
-
-
-                        List<Flat> flats = appDelegate.getFlats();
-
-                        Flat flat = new Flat();
-                        flats.add(flat);
-
-                        Log.d("FlatStat", "House uuid: " + house.getUuid());
-                        Log.d("FlatStat", "Flat uuid: " + flat.getUuid());
-
-                        appDelegate.setCurrentFlat(flat);
+////                        House house = appDelegate.getCurrentHouse();
+////
+////
+////                        List<Flat> flats = appDelegate.getFlats();
+////
+////                        Flat flat = new Flat();
+////                        flats.add(flat);
+////
+////                        Log.d("FlatStat", "House uuid: " + house.getUuid());
+////                        Log.d("FlatStat", "Flat uuid: " + flat.getUuid());
+//
+//                        appDelegate.setCurrentFlat(flat);
                         ///
 
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {

@@ -27,6 +27,7 @@ public class HouseInfoFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private TextView mTextObjectName;
+    private TextView mTextObjectFlatCount;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -74,6 +75,7 @@ public class HouseInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mTextObjectName = view.findViewById(R.id.tv_house_info_object_name);
+        mTextObjectFlatCount = view.findViewById(R.id.tv_house_info_object_flat_count);
 
 
 
@@ -85,6 +87,7 @@ public class HouseInfoFragment extends Fragment {
         db.executeTransactionAsync(r -> {
             RealmHouse realmHouse = r.where(RealmHouse.class).equalTo("id", houseId).findFirst();
             mTextObjectName.setText(realmHouse.getName());
+            mTextObjectFlatCount.setText(String.valueOf(realmHouse.getFlats().stream().count()));
         });
 
         view.findViewById(R.id.ib_house_info_home).setOnClickListener(v -> {
@@ -97,6 +100,12 @@ public class HouseInfoFragment extends Fragment {
 
             NavHostFragment.findNavController(HouseInfoFragment.this)
                     .navigate(R.id.action_houseInfoFragment_to_reportListFragment);
+        });
+
+        view.findViewById(R.id.b_house_info_next).setOnClickListener(v -> {
+
+            NavHostFragment.findNavController(HouseInfoFragment.this)
+                    .navigate(R.id.action_houseInfoFragment_to_flatStartFragment);
         });
     }
 }

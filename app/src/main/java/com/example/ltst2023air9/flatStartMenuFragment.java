@@ -94,11 +94,7 @@ public static final int FLOOR_MAX = 35;
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-        Flat flat = appDelegate.getCurrentFlat();
         save.setOnClickListener(v -> {
-
-            flat.setFloor(floor.getValue());
-            flat.setSection(number.getValue());
 
             Realm db = Realm.getDefaultInstance();
 
@@ -108,7 +104,6 @@ public static final int FLOOR_MAX = 35;
                 realmFlat.setFloor(floor.getValue());
                 realmFlat.setNumber(number.getValue());
 
-                //sort("startTime", Sort.DESCENDING).findFirst();
                 RealmHouse realmHouse = r.where(RealmHouse.class).equalTo("id", houseId).findFirst();
 
                 Log.i("flat start menu", "=====" );

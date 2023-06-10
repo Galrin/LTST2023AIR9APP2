@@ -166,6 +166,10 @@
             android:id="@+id/action_analyzeFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_analyzeFragment_to_flatStartFragment"
+            app:destination="@id/flatStartFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/legendFragment"
@@ -224,6 +228,10 @@
         <action
             android:id="@+id/action_houseInfoFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_houseInfoFragment_to_flatStartFragment"
+            app:destination="@id/flatStartFragment"
             app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment

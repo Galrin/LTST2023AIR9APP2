@@ -57,46 +57,22 @@ public class SplashActivity extends AppCompatActivity {
 
         }, 3800);
 
-        appDelegate = (AppDelegate) getApplicationContext();
-
-
-        Realm db = Realm.getDefaultInstance();
-
-        db.executeTransactionAsync(r -> {
-            for(Checkpoint cp: appDelegate.getCheckpoints()) {
-
-                RealmCheckpoint checkpoint = r.createObject(RealmCheckpoint.class, UUID.randomUUID().toString());
-                checkpoint.setName(cp.getName());
-
-            } });
+//        appDelegate = (AppDelegate) getApplicationContext();
+//
+//
+//        Realm db = Realm.getDefaultInstance();
+//
+//        db.executeTransactionAsync(r -> {
+//            for(Checkpoint cp: appDelegate.getCheckpoints()) {
+//
+//                RealmCheckpoint checkpoint = r.createObject(RealmCheckpoint.class, UUID.randomUUID().toString());
+//                checkpoint.setName(cp.getName());
+//
+//            } });
 
 
     }
-//
-//    public void initInstanceState() { // во время splashscreen
-//
-//        String[] fileList = getApplicationContext().fileList();
-//        int fileListSize = fileList.length;
-//
-//        appDelegate.getHouses().clear();
-//
-//        for(String houseUUID : fileList) {
-//            Log.d("FILE: ", houseUUID);
-//            if(houseUUID.startsWith("+")) {
-//                //.add(new House(fileUUID));
-//
-//
-//                // загружаем json text. превращаем в class instance
-//
-//                // заносим полученый класс в список
-//                //houses.add(house);
-//
-//                --fileListSize;
-//
-//                // progressBar>> ?
-//            }
-//        }
-//    }
+
     private boolean allPermissionsGranted() {
 
         for (String permission : REQUIRED_PERMISSIONS) {
