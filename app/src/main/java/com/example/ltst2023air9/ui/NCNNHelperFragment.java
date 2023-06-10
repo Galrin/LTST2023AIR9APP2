@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -86,7 +87,7 @@ public class NCNNHelperFragment extends Fragment {
     ImageButton capture, toggleFlash;
     PreviewView previewView;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
-    FFmpegMediaMetadataRetriever mmr;
+    //FFmpegMediaMetadataRetriever mmr;
     double total_fps = 0;
     int fps_count = 0;
     ImageView mImageView;
@@ -249,31 +250,35 @@ public class NCNNHelperFragment extends Fragment {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                mmr = new FFmpegMediaMetadataRetriever();
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 
                 mmr.setDataSource(path);
-                String dur = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
-                String sfps = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
+
+                int numFrames = Integer.parseInt(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+
+                String dur = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
+                //String sfps = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
 //                String sWidth = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);  // w
 //                String sHeight = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);  // h
-                String rota = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
+                String rota = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
                 int duration = Integer.parseInt(dur);
-                float fps = Float.parseFloat(sfps);
+                //float fps = Float.parseFloat(sfps);
                 float rotate = 0;
                 if (rota != null) {
                     rotate = Float.parseFloat(rota);
                 }
                 //sbVideo.setMax(duration * 1000);
-                float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
+                //float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
                 videoCurFrameLoc = 0;
 
                 Handler handler = new Handler(Looper.getMainLooper());
                 AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-                while (detectVideo.get() && (videoCurFrameLoc) < (duration * 1000L)) {
-                    videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
+                for (int i = 0; i < numFrames; i++) {
+
+                    //videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
                     //sbVideo.setProgress((int) videoCurFrameLoc);
-                    final Bitmap b = mmr.getFrameAtTime(videoCurFrameLoc, FFmpegMediaMetadataRetriever.OPTION_CLOSEST_SYNC );
+                    final Bitmap b = mmr.getFrameAtIndex(i);//getFrameAtTime(videoCurFrameLoc, MediaMetadataRetriever.OPTION_CLOSEST_SYNC );
                     if (b == null) {
                         continue;
                     }
@@ -301,11 +306,21 @@ public class NCNNHelperFragment extends Fragment {
                     handler.post(() -> {
                         mImageView.setImageBitmap(drawBitmap);
                     });
-                    frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
+                    //frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
 
                     //appDelegate.getTableViewModel().updateRow(11, "hello % for..");
+
+                    try {
+                        Thread.sleep(33); // 30 fps :D
+                    } catch (InterruptedException e) {
+
+                    }
                 }
-                mmr.release();
+                try {
+                    mmr.release();
+                } catch (IOException e) {
+
+                }
                 ArrayList<String> metrics = detectorAnalyzer.detect();
                 int row = 0;
                 for (String val : metrics) {

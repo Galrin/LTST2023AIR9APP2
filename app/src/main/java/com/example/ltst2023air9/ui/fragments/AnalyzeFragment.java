@@ -29,12 +29,15 @@ import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.YoloV5Ncnn;
 import com.example.ltst2023air9.model.Checkpoint;
+import com.example.ltst2023air9.model.RealmCheckpoint;
+import com.example.ltst2023air9.model.RealmFlat;
 import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.realm.Realm;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
@@ -53,45 +56,18 @@ public class AnalyzeFragment extends Fragment {
     protected float videoSpeed = 5.0f;
     FFmpegMediaMetadataRetriever mmr;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public AnalyzeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnalyzeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AnalyzeFragment newInstance(String param1, String param2) {
-        AnalyzeFragment fragment = new AnalyzeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new AnalyzeFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
 
         boolean ret_init = yolov5ncnn.Init(getActivity().getAssets());
         if (!ret_init) {
@@ -127,60 +103,61 @@ public class AnalyzeFragment extends Fragment {
         mRootLayout = view.findViewById(R.id.ll_analyze_content);
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
+        final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
 
-        for(Checkpoint cp: appDelegate.getCheckpoints()) {
-            LinearLayout linearLayout = new LinearLayout(getActivity());
-            linearLayout.setPadding(10, 10, 10, 10);
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayout.setGravity(Gravity.CENTER_VERTICAL);
-            ProgressBar progressBar = new ProgressBar(getActivity());
-            progressBar.setProgress(4, true);
-            progressBar.setMax(100);
+        Realm db = Realm.getDefaultInstance();
+        db.executeTransactionAsync(r -> {
+            RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+            if (realmFlat != null) {
+                for (RealmCheckpoint rcp: realmFlat.getCheckpoints()) {
 
-            TextView textView = new TextView(getActivity());
-            textView.setText(cp.getName());
-            textView.setTextSize(26);
-            textView.setTextColor(Color.WHITE);
-            textView.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                    LinearLayout linearLayout = new LinearLayout(getActivity());
+                    linearLayout.setPadding(10, 10, 10, 10);
+                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    linearLayout.setGravity(Gravity.CENTER_VERTICAL);
+                    ProgressBar progressBar = new ProgressBar(getActivity());
+                    progressBar.setProgress(4, true);
+                    progressBar.setMax(100);
 
-            linearLayout.addView(progressBar);
-            linearLayout.addView(textView);
+                    TextView textView = new TextView(getActivity());
+                    textView.setText(rcp.getName());
+                    textView.setTextSize(26);
+                    textView.setTextColor(Color.WHITE);
+                    textView.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+
+                    linearLayout.addView(progressBar);
+                    linearLayout.addView(textView);
 
 
-            mRootLayout.addView(linearLayout);
+                    new Handler(Looper.getMainLooper()).post(() -> mRootLayout.addView(linearLayout));
 
-            //detectOnVideo(cp.getVideoPath());
-        }
+                   // detectOnVideo(rcp.getVideoPath());
+                }
+            }
+        });
 
     }
 
-    public void startInvestigation(String videoPath) {
-                detectOnVideo(videoPath);
-
-    }
 
 
     public void detectOnVideo(final String path) {
-        if (isRunning.get()) {
-            Toast.makeText(getActivity(), "Video is running", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        isRunning.set(true);
-        detectorAnalyzer.clear();
+//        if (isRunning.get()) {
+//            //Toast.makeText(AnalyzeFragment.this.getActivity(), "Video is running", Toast.LENGTH_SHORT).show();
+//            Log.i("detectOnVideo", "allready running");
+//            return;
+//        }
+        //isRunning.set(true);
+
         //Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
         //sbVideo.setVisibility(View.VISIBLE);
         //sbVideoSpeed.setVisibility(View.VISIBLE);
-        try {
-            ListenableFuture<ProcessCameraProvider> processCameraProvider = ProcessCameraProvider.getInstance(getActivity());
 
-            ProcessCameraProvider cameraProvider = processCameraProvider.get();
-
-            cameraProvider.unbindAll();
-        } catch (Exception e) {
-        }
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+
+                detectorAnalyzer.clear();
+
                 mmr = new FFmpegMediaMetadataRetriever();
 
                 mmr.setDataSource(path);
@@ -245,7 +222,7 @@ public class AnalyzeFragment extends Fragment {
                     row += 1;
                 }
 
-                if (isRunning.get()) {
+
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -253,11 +230,11 @@ public class AnalyzeFragment extends Fragment {
                             //sbVideoSpeed.setVisibility(View.GONE);
                            // anal.setEnabled(true);
                             Log.i("Investigate", "end video " + path);
-                            Toast.makeText(getActivity(), "Video end!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(AnalyzeFragment.this.getActivity(), "Video end!", Toast.LENGTH_LONG).show();
                         }
                     });
-                }
-                isRunning.set(false);
+
+                //isRunning.set(false);
             }
         }, "video detect");
         thread.start();

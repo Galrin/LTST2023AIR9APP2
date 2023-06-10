@@ -36,15 +36,19 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.ltst2023air9.AppDelegate;
+import com.example.ltst2023air9.MediaStorageUtil;
 import com.example.ltst2023air9.R;
+import com.example.ltst2023air9.model.Checkpoint;
 import com.example.ltst2023air9.model.Flat;
 import com.example.ltst2023air9.model.House;
+import com.example.ltst2023air9.model.RealmCheckpoint;
 import com.example.ltst2023air9.model.RealmFlat;
 import com.example.ltst2023air9.model.RealmHouse;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -153,7 +157,6 @@ public class NCNNCameraFragment extends Fragment {
         MediaStoreOutputOptions options = new MediaStoreOutputOptions.Builder(getActivity().getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
                 .setContentValues(contentValues).build();
 
-
         recording = videoCapture.getOutput().prepareRecording(getActivity(), options).start(ContextCompat.getMainExecutor(getActivity()), videoRecordEvent -> {
             if (videoRecordEvent instanceof VideoRecordEvent.Start) {
                 capture.setEnabled(true);
@@ -163,8 +166,9 @@ public class NCNNCameraFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
                     Uri outputUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
-                    String videoPath =  UriToString(outputUri);
-                    Log.i("Recorder", "Recorded video uri is "+ videoPath);
+
+                    final String y = MediaStorageUtil.getPath(getContext(), outputUri);
+                    Log.i("VIDEOPATH", "Recorded video uri is "+ y);
 
 
                     final AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
@@ -182,6 +186,26 @@ public class NCNNCameraFragment extends Fragment {
                     Log.d("camerafragment", "appDelegate.getCheckpoints().size(" + appDelegate.getCheckpoints().size() + ")");
 
                     Realm db = Realm.getDefaultInstance();
+
+                    Checkpoint checkpoint = appDelegate.getCheckpoints().get(mCurrentCheckpointNumber);
+                    final String checkpointName = checkpoint.getName();
+                    db.executeTransactionAsync(r -> {
+                        RealmCheckpoint realmCheckpoint = r.createObject(RealmCheckpoint.class, UUID.randomUUID().toString());
+
+                        realmCheckpoint.setName(checkpointName);
+                        realmCheckpoint.setVideoPath(y);
+
+                        Log.i("camerafragment_flat", "=====" );
+                        Log.i("camerafragment_flat", "ap flat id "  + currentRealmFlatId);
+                        RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
+
+                        if (realmFlat != null) {
+                            Log.i("camerafragment_flat", "find id " + realmFlat.getId());
+
+                            realmFlat.getCheckpoints().add(realmCheckpoint);
+                        }
+                    });
+
 
                     if( mCurrentCheckpointNumber < ( appDelegate.getCheckpoints().size() -1 ) ) {
                         /// GOTO: STEP REPEAT

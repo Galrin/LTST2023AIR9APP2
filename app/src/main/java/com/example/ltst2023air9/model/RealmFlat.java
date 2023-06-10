@@ -1,5 +1,6 @@
 package com.example.ltst2023air9.model;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import io.realm.RealmList;
@@ -62,4 +63,12 @@ public class RealmFlat extends RealmObject {
     // You can define inverse relationships.
     @LinkingObjects("flats")
     public final RealmResults<RealmHouse> owners = null;
+
+    public void setCheckpoints(RealmList<RealmCheckpoint> checkpoints) {
+        this.checkpoints = checkpoints;
+    }
+
+    public RealmList<RealmCheckpoint> getCheckpoints() {
+        return checkpoints;
+    }
 }

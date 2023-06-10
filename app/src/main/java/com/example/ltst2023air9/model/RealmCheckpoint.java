@@ -16,6 +16,7 @@ public class RealmCheckpoint extends RealmObject {
     @Index
     private String id; // = UUID.randomUUID().toString();
 
+    private int pointId;
     private String name;
 
     private String videoPath;
@@ -41,6 +42,22 @@ public class RealmCheckpoint extends RealmObject {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public int getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(int pointId) {
+        this.pointId = pointId;
     }
 
     // You can define inverse relationships.

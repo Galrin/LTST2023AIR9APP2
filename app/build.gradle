@@ -11,10 +11,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.ltst2023air9"
-        minSdk 24
+        minSdk 28
         targetSdk 33
 
-        versionCode 1
+        versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
