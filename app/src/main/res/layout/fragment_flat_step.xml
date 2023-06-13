@@ -8,9 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,67 +40,67 @@
             android:textAlignment="center"
             android:textSize="80dp" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/flat_step_fab"
-                        android:layout_weight="1"
-                        android:layout_margin="10dp"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_gravity="center_horizontal"
-                        android:backgroundTint="@color/design_default_color_primary"
-                        android:clickable="true"
-                        android:src="@drawable/fabshape"
-                        android:text="Пуск"
-                        android:textAlignment="center"
-                        android:textColor="#2F4981"
-                        android:textSize="20sp"
-                        app:background="@drawable/fabshape"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/flat_step_fab"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/design_default_color_primary"
+            android:clickable="true"
+            android:src="@drawable/fabshape"
+            android:text="Пуск"
+            android:textAlignment="center"
+            android:textColor="#2F4981"
+            android:textSize="20sp"
+            app:background="@drawable/fabshape"
 
-                        app:elevation="@dimen/cardview_compat_inset_shadow" />
+            app:elevation="@dimen/cardview_compat_inset_shadow" />
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:weightSum="2"-->
-<!--            android:padding="10dp">-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:weightSum="2"-->
+        <!--            android:padding="10dp">-->
 
-<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:id="@+id/flat_step_fab"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="120dp"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:backgroundTint="@color/design_default_color_primary"-->
-<!--                android:clickable="true"-->
-<!--                android:src="@drawable/fabshape"-->
-<!--                android:text="Пуск"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textColor="#2F4981"-->
-<!--                android:textSize="20sp"-->
-<!--                app:background="@drawable/fabshape"-->
+        <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--                android:id="@+id/flat_step_fab"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:layout_margin="10dp"-->
+        <!--                android:layout_width="120dp"-->
+        <!--                android:layout_height="120dp"-->
+        <!--                android:layout_gravity="center_horizontal"-->
+        <!--                android:backgroundTint="@color/design_default_color_primary"-->
+        <!--                android:clickable="true"-->
+        <!--                android:src="@drawable/fabshape"-->
+        <!--                android:text="Пуск"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textColor="#2F4981"-->
+        <!--                android:textSize="20sp"-->
+        <!--                app:background="@drawable/fabshape"-->
 
-<!--                app:elevation="@dimen/cardview_compat_inset_shadow" />-->
+        <!--                app:elevation="@dimen/cardview_compat_inset_shadow" />-->
 
-<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:id="@+id/flat_skip_fab"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="120dp"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:backgroundTint="@color/cardview_shadow_start_color2"-->
-<!--                android:clickable="true"-->
-<!--                android:src="@drawable/fabshape"-->
-<!--                android:text="Пуск"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textColor="#2F4981"-->
-<!--                android:textSize="20sp"-->
-<!--                app:background="@drawable/fabshape"-->
+        <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--                android:id="@+id/flat_skip_fab"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:layout_width="120dp"-->
+        <!--                android:layout_height="120dp"-->
+        <!--                android:layout_gravity="center_horizontal"-->
+        <!--                android:backgroundTint="@color/cardview_shadow_start_color2"-->
+        <!--                android:clickable="true"-->
+        <!--                android:src="@drawable/fabshape"-->
+        <!--                android:text="Пуск"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textColor="#2F4981"-->
+        <!--                android:textSize="20sp"-->
+        <!--                app:background="@drawable/fabshape"-->
 
-<!--                app:elevation="@dimen/cardview_compat_inset_shadow" />-->
+        <!--                app:elevation="@dimen/cardview_compat_inset_shadow" />-->
 
-<!--        </LinearLayout>-->
+        <!--        </LinearLayout>-->
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

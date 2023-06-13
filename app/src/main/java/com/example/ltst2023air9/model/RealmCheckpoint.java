@@ -1,8 +1,5 @@
 package com.example.ltst2023air9.model;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -14,23 +11,20 @@ import io.realm.annotations.RealmClass;
 @RealmClass
 public class RealmCheckpoint extends RealmObject {
 
+    // You can define inverse relationships.
+    @LinkingObjects("checkpoints")
+    public final RealmResults<RealmFlat> owners = null;
+    RealmList<String> metrics = new RealmList<>();
     @PrimaryKey
     @Index
     private String id; // = UUID.randomUUID().toString();
-
-    private int pointId;
+    private int globalCheckpointId;
     private String name;
-
     private String videoPath;
-
     private float startLatitude;
     private float startLongitude;
-
     private float endLatitude;
     private float endLongitude;
-
-    RealmList<String> metrics = new RealmList<>();
-
 
     public String getName() {
         return name;
@@ -48,20 +42,12 @@ public class RealmCheckpoint extends RealmObject {
         this.id = id;
     }
 
-    public void setVideoPath(String videoPath) {
-        this.videoPath = videoPath;
-    }
-
     public String getVideoPath() {
         return videoPath;
     }
 
-    public int getPointId() {
-        return pointId;
-    }
-
-    public void setPointId(int pointId) {
-        this.pointId = pointId;
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 
     public RealmList<String> getMetrics() {
@@ -72,7 +58,11 @@ public class RealmCheckpoint extends RealmObject {
         this.metrics = metrics;
     }
 
-    // You can define inverse relationships.
-    @LinkingObjects("checkpoints")
-    public final RealmResults<RealmFlat> owners = null;
+    public int getGlobalCheckpointId() {
+        return globalCheckpointId;
+    }
+
+    public void setGlobalCheckpointId(int globalCheckpointId) {
+        this.globalCheckpointId = globalCheckpointId;
+    }
 }

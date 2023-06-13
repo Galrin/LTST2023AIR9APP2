@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:id="@+id/li_flat_layout"
+    android:id="@+id/li_checkpoint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
@@ -20,46 +20,11 @@
         android:weightSum="10">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingLeft="20dp"
-            android:text="Кв."
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textFontWeight="700"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/li_flat_text"
+            android:id="@+id/li_checkpoint_text"
             android:layout_width="0dp"
 
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingLeft="20dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textFontWeight="700"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingLeft="20dp"
-            android:text="Этаж"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textFontWeight="700"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/li_floor_text"
-            android:layout_width="0dp"
-
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="7"
             android:paddingLeft="20dp"
             android:text=""
             android:textAlignment="center"
@@ -74,7 +39,7 @@
             android:layout_weight="2">
 
             <ImageButton
-                android:id="@+id/li_flat_button"
+                android:id="@+id/li_checkpoint_button"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="@color/colorAccent"
@@ -93,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="подробнее"
+                    android:text="Скор карта"
                     android:textColor="@color/white" />
             </LinearLayout>
         </FrameLayout>

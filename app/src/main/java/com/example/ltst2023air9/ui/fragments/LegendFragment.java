@@ -1,15 +1,14 @@
 package com.example.ltst2023air9.ui.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.ltst2023air9.R;
 
@@ -20,49 +19,21 @@ import com.example.ltst2023air9.R;
  */
 public class LegendFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public LegendFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LegendFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static LegendFragment newInstance(String param1, String param2) {
-        LegendFragment fragment = new LegendFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new LegendFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_legend, container, false);
     }
@@ -71,15 +42,13 @@ public class LegendFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.b_legend_back).setOnClickListener(v -> {
-                        NavHostFragment.findNavController(LegendFragment.this)
-                    .navigate(R.id.action_legendFragment_to_mainMenuFragment);
+            NavHostFragment.findNavController(LegendFragment.this).navigate(R.id.action_legendFragment_to_mainMenuFragment);
         });
 
         view.findViewById(R.id.tv_show_our_team).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                NavHostFragment.findNavController(LegendFragment.this)
-                    .navigate(R.id.action_legendFragment_to_aboutTeamFragment);
+                NavHostFragment.findNavController(LegendFragment.this).navigate(R.id.action_legendFragment_to_aboutTeamFragment);
                 return false;
             }
         });

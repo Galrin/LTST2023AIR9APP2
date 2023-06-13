@@ -1,5 +1,6 @@
 package com.example.ltst2023air9.ui.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,27 +33,19 @@ import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Stack;
 
 import io.realm.Realm;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnalyzeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AnalyzeFragment extends Fragment {
     public static boolean USE_GPU = true;
 
     public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
     private final YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
-    private final AtomicBoolean isRunning = new AtomicBoolean(false);
-    protected long videoCurFrameLoc = 0;
-    protected float videoSpeed = 5.0f;
+    private final Stack<Thread> mThreadList = new Stack<>();
     LinearLayout mRootLayout;
-    FFmpegMediaMetadataRetriever mmr;
-
+    private Realm db;
 
     public AnalyzeFragment() {
         // Required empty public constructor
@@ -97,27 +89,39 @@ public class AnalyzeFragment extends Fragment {
                     .navigate(R.id.action_analyzeFragment_to_mainMenuFragment);
 
         });
+        view.findViewById(R.id.b_anal_reportlist).setOnClickListener(v -> {
+
+            // сохраняем всё в flat, house
+            // в меню
+            NavHostFragment.findNavController(AnalyzeFragment.this)
+                    .navigate(R.id.action_analyzeFragment_to_reportListFragment);
+
+        });
 
         mRootLayout = view.findViewById(R.id.ll_analyze_content);
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
-
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
             RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
             if (realmFlat != null) {
                 for (RealmCheckpoint rcp : realmFlat.getCheckpoints()) {
 
+
                     LinearLayout linearLayout = new LinearLayout(getActivity());
-                    linearLayout.setPadding(10, 10, 10, 10);
-                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    linearLayout.setPadding(20, 20, 20, 20);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
                     linearLayout.setGravity(Gravity.CENTER_VERTICAL);
-                    ProgressBar progressBar = new ProgressBar(getActivity());
-                    progressBar.setProgress(4, true);
+                    ProgressBar progressBar = new ProgressBar(getActivity(), null,
+                            android.R.attr.progressBarStyleHorizontal);
+                    progressBar.setProgress(0, true);
+
                     final int vid = View.generateViewId();
                     progressBar.setId(vid);
                     progressBar.setMax(100);
+                    progressBar.setMin(0);
+                    progressBar.setProgress(0);
 
                     TextView textView = new TextView(getActivity());
                     textView.setText(rcp.getName());
@@ -132,6 +136,12 @@ public class AnalyzeFragment extends Fragment {
                     new Handler(Looper.getMainLooper()).post(() -> mRootLayout.addView(linearLayout));
 
                     detectOnVideo(rcp.getVideoPath(), rcp.getId(), vid);
+
+
+                }
+                if (!mThreadList.isEmpty()) {
+                    Thread next = mThreadList.pop();
+                    next.start();
                 }
             }
         });
@@ -144,6 +154,8 @@ public class AnalyzeFragment extends Fragment {
         detectorAnalyzer.clear();
 
         Thread thread = new Thread(new Runnable() {
+
+
             @Override
             public void run() {
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
@@ -153,7 +165,6 @@ public class AnalyzeFragment extends Fragment {
                 int numFrames = Integer.parseInt(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
 
                 String dur = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);  // ms
-                //String sfps = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_FRAMERATE);  // fps
 //                String sWidth = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);  // w
 //                String sHeight = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);  // h
                 String rota = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
@@ -165,15 +176,11 @@ public class AnalyzeFragment extends Fragment {
                 }
                 //sbVideo.setMax(duration * 1000);
                 //float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
-                videoCurFrameLoc = 0;
 
                 Handler handler = new Handler(Looper.getMainLooper());
-                AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
                 for (int i = 0; i < numFrames; i++) {
 
-                    //videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
-                    //sbVideo.setProgress((int) videoCurFrameLoc);
                     final Bitmap b = mmr.getFrameAtIndex(i);//getFrameAtTime(videoCurFrameLoc, MediaMetadataRetriever.OPTION_CLOSEST_SYNC );
                     if (b == null) {
                         continue;
@@ -197,6 +204,12 @@ public class AnalyzeFragment extends Fragment {
                         detectorAnalyzer.add(result);
                     }
 
+                    final int finalI = i;
+                    handler.post(() -> {
+                        ProgressBar progressBar = mRootLayout.findViewById(vid);
+                        progressBar.setMax(numFrames);
+                        progressBar.setProgress(finalI, true);
+                    });
 
                     //showResultOnUI();
                     try {
@@ -212,7 +225,8 @@ public class AnalyzeFragment extends Fragment {
                 }
                 final ArrayList<String> metrics = detectorAnalyzer.detect();
 
-                Realm db = Realm.getDefaultInstance();
+                db = Realm.getDefaultInstance();
+                //Realm db = this.db;
                 db.executeTransactionAsync(realm -> {
                     RealmCheckpoint realmCheckpoint = realm.where(RealmCheckpoint.class).equalTo("id", checkpointId).findFirst();
                     if (realmCheckpoint != null) {
@@ -226,20 +240,23 @@ public class AnalyzeFragment extends Fragment {
                     }
                 });
 
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-//
-//                        ProgressBar progressBar = getActivity().findViewById(vid);
-//                        progressBar.setIndeterminate(false);
-//                        progressBar.setProgressDrawable(getActivity().getDrawable(R.drawable.ic_happy));
-                        Log.i("videoend", "videoend" + checkpointId + " " + vid);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    ProgressBar progressBar = mRootLayout.findViewById(vid);
+
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+
+                    if (!mThreadList.isEmpty()) {
+                        Thread next = mThreadList.pop();
+                        next.start();
                     }
                 });
 
+                Log.i("videoend", "videoend" + checkpointId + " " + vid);
             }
+
+
         }, "video detect");
-        thread.start();
+        mThreadList.push(thread); //.start();
 //        startCamera();
     }
 

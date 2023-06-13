@@ -1,4 +1,4 @@
-package com.example.ltst2023air9.ui;
+package com.example.ltst2023air9.ui.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +44,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.YoloV5Ncnn;
+import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
@@ -51,26 +52,16 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
-
-import com.example.ltst2023air9.ui.DetectorResultsAnalyzer;
-
 //import static androidx.camera.core.internal.utils.ImageUtil.createBitmapFromImageProxy;
 public class NCNNHelperFragment extends Fragment {
-//    @NonNull
-//    default Bitmap toBitmap() {
-//        return createBitmapFromImageProxy(this);
-//    }
 
-
-    public static int VIDEO_SPEED_MAX = 20 + 1;
-    public static int VIDEO_SPEED_MIN = 1;
     public static int YOLOV5S = 1;
     public static int YOLOV4_TINY = 2;
     public static int MOBILENETV2_YOLOV3_NANO = 3;
     public static int YOLOV5_CUSTOM_LAYER = 11;
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
     public static boolean USE_GPU = true;
+    public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
     private final AtomicBoolean detectCamera = new AtomicBoolean(false);
     private final AtomicBoolean detectPhoto = new AtomicBoolean(false);
     private final AtomicBoolean detectVideo = new AtomicBoolean(false);
@@ -91,12 +82,13 @@ public class NCNNHelperFragment extends Fragment {
     double total_fps = 0;
     int fps_count = 0;
     ImageView mImageView;
+    Button anal;
     //ImageView mPreviewImage;
     // ExecutorService detectService = Executors.newSingleThreadExecutor();
     private SeekBar sbVideo;
     private SeekBar sbVideoSpeed;
     //private final AtomicBoolean mIsPreviewDetectorEnable = new AtomicBoolean(false);
-    private long startTime = 0;
+    private final long startTime = 0;
     private int width;
     private int height;
     private Toolbar toolbar;
@@ -110,11 +102,7 @@ public class NCNNHelperFragment extends Fragment {
     private Button btnPhoto;
     private Button btnVideo;
     private TextureView viewFinder;
-
-
     private Object mDetectResult;
-    Button anal;
-    public static DetectorResultsAnalyzer detectorAnalyzer = new DetectorResultsAnalyzer();
 
     public NCNNHelperFragment() {
         // Required empty public constructor

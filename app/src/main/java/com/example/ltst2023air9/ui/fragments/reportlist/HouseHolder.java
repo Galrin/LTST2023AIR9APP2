@@ -13,17 +13,10 @@ import com.example.ltst2023air9.model.RealmHouse;
 
 public class HouseHolder extends RecyclerView.ViewHolder
 {
-//    private static AtomicInteger sCurrentItemCounter = new AtomicInteger(0);
-//
-//    synchronized public static int nextItem()
-//    {
-//        return sCurrentItemCounter.getAndIncrement();
-//    }
+
 
     public static final String TAG = HouseHolder.class.getSimpleName();
 
-//
-//    private final ImageView mImageView;
     private final TextView mTextView;
 
     private ReportListAdapter mAdapter;
@@ -37,16 +30,9 @@ public class HouseHolder extends RecyclerView.ViewHolder
         {
             @Override
             public void onClick(View v) {
-
                 AppDelegate appDelegate = (AppDelegate) v.getContext().getApplicationContext();
                 appDelegate.setCurrentRealmHouseId(realmHouse.getId());
-
-                Log.i("List onClick", "house id " + realmHouse.getId());
-                Log.i("List onClick", "house name " + realmHouse.getName());
-
                 mAdapter.onRecyclerViewItemClick(getAdapterPosition());
-                // getLayoutPosition() - позиция на вьюшке?
-                // getAdapterPosition() - позиция в списке?
             }
         });
     }

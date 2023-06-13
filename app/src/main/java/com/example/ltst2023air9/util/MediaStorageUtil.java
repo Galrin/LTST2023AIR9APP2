@@ -1,4 +1,4 @@
-package com.example.ltst2023air9;
+package com.example.ltst2023air9.util;
 
 import android.content.ContentUris;
 import android.content.Context;

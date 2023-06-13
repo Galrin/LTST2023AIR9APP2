@@ -4,7 +4,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,7 @@ public class FlatStepFragment extends Fragment {
     }
 
     public static FlatStepFragment newInstance(String param1, String param2) {
-        FlatStepFragment fragment = new FlatStepFragment();
-        return fragment;
+        return new FlatStepFragment();
     }
 
     @Override
@@ -43,27 +41,19 @@ public class FlatStepFragment extends Fragment {
 
         final AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
-
         final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
 
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
-            Log.i("FlatStep", "------------------");
-
             RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
             if (realmFlat != null) {
                 mCurrentCheckpointNumber = realmFlat.getCurrentCheckpointNumber();
-                Log.i("FlatStep", "current RealmFlatId: " + realmFlat.getId());
-                Log.i("FlatStep", "current GLOBAL checkpoint: " + mCurrentCheckpointNumber);
             }
-            Log.i("FlatStep", "//------------------");
-
         });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_flat_step, container, false);
     }
@@ -78,31 +68,17 @@ public class FlatStepFragment extends Fragment {
 
 
         view.findViewById(R.id.flat_step_fab).setOnClickListener(v -> {
-//            NavHostFragment.findNavController(FlatStepFragment.this)
-//                    .navigate(R.id.action_flatStepFragment_to_flatStepFragment);
             initHelper(view);
         });
-
-
-//        Flat flat = appDelegate.getCurrentFlat();
-//
-//        Log.d("step", "flat uuid: " + flat.getUuid());
-//        Log.d("step", "flat section: " + flat.getSection());
-//        Log.d("step", "flat floor: " + flat.getFloor());
-
     }
 
     private void initHelper(View view) {
 
         AppDelegate appDelegate = (AppDelegate) view.getContext().getApplicationContext();
-//        Flat flat = appDelegate.getCurrentFlat();
-
         Checkpoint checkpoint = appDelegate.getCheckpoints().get(mCurrentCheckpointNumber);
 
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(view.findViewById(R.id.flat_step_fab),
-                                "Точка осмотра",
-                                "Подойдите к точке: " + checkpoint.getName().toUpperCase() + ". Когда будете готовы - запишите видео.")
+                TapTarget.forView(view.findViewById(R.id.flat_step_fab), "Точка осмотра", "Подойдите к точке: " + checkpoint.getName().toUpperCase() + ". Когда будете готовы - запишите видео.")
                         // All options below are optional
                         .outerCircleColor(R.color.white)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
@@ -126,16 +102,7 @@ public class FlatStepFragment extends Fragment {
                         super.onTargetClick(view);      // This call is optional
                         //              doSomething();
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//                            Intent intent = new Intent(view.getContext().getApplicationContext(), NCNNCameraActivity.class);
-//                            Bundle extras = new Bundle();
-//                            extras.putString("from", FlatStepFragment.class.getSimpleName());
-//                            intent.putExtras(extras);
-//
-//                            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-//
-
-                            NavHostFragment.findNavController(FlatStepFragment.this)
-                                    .navigate(R.id.action_flatStepFragment_to_NCNNCameraFragment);
+                            NavHostFragment.findNavController(FlatStepFragment.this).navigate(R.id.action_flatStepFragment_to_NCNNCameraFragment);
                         }, 250);
                     }
                 });

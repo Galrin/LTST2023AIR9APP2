@@ -16,11 +16,9 @@ import com.evrencoskun.tableview.TableView;
 import com.example.ltst2023air9.AppDelegate;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.RealmCheckpoint;
-import com.example.ltst2023air9.model.RealmFlat;
 import com.example.ltst2023air9.ui.fragments.tableview.TableViewAdapter;
 import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 
-import java.util.Collections;
 import java.util.List;
 
 import io.realm.Realm;
@@ -33,8 +31,9 @@ import io.realm.RealmList;
  */
 public class MultiReportTableFragment extends Fragment {
 
-    private static RealmList<RealmCheckpoint> realmCheckpointList = null;
-    private static int selectedCheckpoint = 0;
+    private static final RealmList<RealmCheckpoint> realmCheckpointList = null;
+    private static final int selectedCheckpoint = 0;
+    RealmCheckpoint mCheckpoint = null;
     private TableView mTableView;
     private TextView mTextHeader;
 
@@ -63,24 +62,25 @@ public class MultiReportTableFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mTextHeader = view.findViewById(R.id.tv_table_header);
+
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         final String currentFlatId = appDelegate.getCurrentRealmFlatId();
+        final String currentCheckpointId = appDelegate.getCurrentRealmCheckpointId();
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
-            RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentFlatId).findFirst();
-            if(realmFlat != null) {
-                RealmList<RealmCheckpoint> checkpoints = realmFlat.getCheckpoints();
-                realmCheckpointList = checkpoints;
-
-                
+            RealmCheckpoint realmCheckpoint = r.where(RealmCheckpoint.class).equalTo("id", currentCheckpointId).findFirst();
+            if (realmCheckpoint != null) {
+                mCheckpoint = realmCheckpoint;
+                mTextHeader.setText(getActivity().getString(R.string.table_header_text) + ": " + realmCheckpoint.getName());
+                List<String> metrics = realmCheckpoint.getMetrics();
+                int row = 0;
+                for (String val : metrics) {
+                    appDelegate.getTableViewModel().updateRow(row, val);
+                    row += 1;
+                }
             }
         });
-        mTextHeader = view.findViewById(R.id.tv_table_header);
-        if(realmCheckpointList != null) {
-            if(realmCheckpointList.size() > 0) {
-                mTextHeader.setText(getActivity().getString(R.string.table_header_text) + ": " + realmCheckpointList.get(selectedCheckpoint).getName());
-            }
-        }
 
 
         ImageButton buttonBack = view.findViewById(R.id.b_anal_back);

@@ -24,10 +24,9 @@
 
 package com.example.ltst2023air9.ui.fragments.tableview;
 
-import android.util.Log;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.ui.fragments.tableview.model.Cell;
 import com.example.ltst2023air9.ui.fragments.tableview.model.ColumnHeader;
@@ -35,7 +34,6 @@ import com.example.ltst2023air9.ui.fragments.tableview.model.RowHeader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by evrencoskun on 4.02.2018.
@@ -77,8 +75,6 @@ public class TableViewModel {
     public static final String METRIC_PERCENT_DOOR = "Доля от дверных проемов";
 
 
-
-
     // Columns indexes
     public static final int MOOD_COLUMN_INDEX = 3;
     public static final int GENDER_COLUMN_INDEX = 4;
@@ -104,6 +100,7 @@ public class TableViewModel {
     private final int mSadDrawable;
 
     List<List<Cell>> list = new ArrayList<>();
+
     public TableViewModel() {
         // initialize drawables
         mBoyDrawable = R.drawable.ic_male;
@@ -144,7 +141,7 @@ public class TableViewModel {
      */
     @NonNull
     private List<List<Cell>> getCellListForSortingTest() {
-        List<String>typeList = new ArrayList<>();
+        List<String> typeList = new ArrayList<>();
         typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
         typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
         typeList.add(FLAT_TYPE_ALL_WITHOUT_MOP);
@@ -174,7 +171,7 @@ public class TableViewModel {
         typeList.add(FLAT_TYPE_MOP);
 
 
-        List<String>surfaceList = new ArrayList<>();
+        List<String> surfaceList = new ArrayList<>();
         surfaceList.add(SURFACE_FLOOR);
         surfaceList.add(SURFACE_FLOOR);
         surfaceList.add(SURFACE_FLOOR);
@@ -203,7 +200,7 @@ public class TableViewModel {
         surfaceList.add(SURFACE_ROOF);
         surfaceList.add(SURFACE_ROOF);
 
-        List<String>classList = new ArrayList<>();
+        List<String> classList = new ArrayList<>();
         classList.add(CLASS_NO);
         classList.add(CLASS_DARK);
         classList.add(CLASS_WHITE);
@@ -232,7 +229,7 @@ public class TableViewModel {
         classList.add(CLASS_DARK);
         classList.add(CLASS_WHITE);
 
-        List<String>metricList = new ArrayList<>();
+        List<String> metricList = new ArrayList<>();
         metricList.add(METRIC_PERCENT_WITH_STATE);
         metricList.add(METRIC_PERCENT_WITH_STATE);
         metricList.add(METRIC_PERCENT_WITH_STATE);
@@ -288,7 +285,7 @@ public class TableViewModel {
 
                 Cell cell;
 
-                    cell = new Cell(id, text);
+                cell = new Cell(id, text);
 
                 cellList.add(cell);
             }
@@ -338,7 +335,7 @@ public class TableViewModel {
 
     @NonNull
     public void reinitCellList() {
-        list =  new ArrayList<>();
+        list = new ArrayList<>();
         getCellListForSortingTest();
     }
 }

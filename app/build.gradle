@@ -37,9 +37,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    realm {
-//        syncEnabled = true
-//    }
     buildFeatures {
         viewBinding true
     }
@@ -62,7 +59,7 @@ dependencies {
     implementation "androidx.camera:camera-video:${camerax_version}"
     // If you want to additionally use the CameraX View class
     implementation "androidx.camera:camera-view:${camerax_version}"
-//    // If you want to additionally add CameraX ML Kit Vision Integration
+    // If you want to additionally add CameraX ML Kit Vision Integration
 //    implementation "androidx.camera:camera-mlkit-vision:${camerax_version}"
     // If you want to additionally use the CameraX Extensions library
     implementation "androidx.camera:camera-extensions:${camerax_version}"
@@ -71,25 +68,13 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
 
     implementation("org.greenrobot:eventbus:3.3.1")
 
-//    implementation 'com.zxy.android:recovery:1.0.0'
-    // photoview
-//   implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-//    implementation 'com.bm.photoview:library:1.4.1'
-    // FFMMR
-
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.19'
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.19'
-    //implementation 'com.google.zxing:core:3.3.0'
-
-    //noinspection GradleDependency
-//    implementation "androidx.camera:camera-core:1.0.0-alpha05"
-//implementation 'androidx.camera:camera-view:1.0.0-alpha05'
     implementation 'com.github.evrencoskun:TableView:v0.8.9.4'
     implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+    
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

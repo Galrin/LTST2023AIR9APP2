@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.FlatStartFragment"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.fragments.FlatStartFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,13 +14,6 @@
         android:text="Ввод данных о доме"
         android:textAlignment="center"
         android:textSize="34sp" />
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_house_name"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="text" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

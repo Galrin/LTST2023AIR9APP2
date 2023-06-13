@@ -1,7 +1,5 @@
 package com.example.ltst2023air9.model;
 
-import java.util.UUID;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -15,7 +13,7 @@ public class RealmHouse extends RealmObject {
     private String id; // = UUID.randomUUID().toString();
 
     private String name;
-    private RealmList<RealmFlat> flats =  new RealmList<>();
+    private RealmList<RealmFlat> flats = new RealmList<>();
 
     private float startLatitude;
     private float startLongitude;

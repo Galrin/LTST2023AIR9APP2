@@ -40,11 +40,17 @@
             android:text="Продолжить осмотр" />
 
         <Button
+            android:id="@+id/b_anal_reportlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="К отчётам" />
+
+
+        <Button
             android:id="@+id/b_anal_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="В главное меню" />
-
 
         <TextView
             android:layout_width="match_parent"

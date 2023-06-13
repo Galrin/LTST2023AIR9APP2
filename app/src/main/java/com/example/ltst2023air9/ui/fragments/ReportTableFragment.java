@@ -1,16 +1,15 @@
 package com.example.ltst2023air9.ui.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.evrencoskun.tableview.TableView;
 import com.example.ltst2023air9.AppDelegate;
@@ -26,6 +25,7 @@ import com.example.ltst2023air9.ui.fragments.tableview.TableViewModel;
 public class ReportTableFragment extends Fragment {
 
     private TableView mTableView;
+
     public ReportTableFragment() {
         // Required empty public constructor
     }

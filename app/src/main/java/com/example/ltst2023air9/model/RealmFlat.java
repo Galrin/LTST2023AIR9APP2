@@ -1,8 +1,5 @@
 package com.example.ltst2023air9.model;
 
-import java.util.Calendar;
-import java.util.UUID;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -14,17 +11,15 @@ import io.realm.annotations.RealmClass;
 @RealmClass
 public class RealmFlat extends RealmObject {
 
+    // You can define inverse relationships.
+    @LinkingObjects("flats")
+    public final RealmResults<RealmHouse> owners = null;
     @PrimaryKey
     @Index
     private String id; // = UUID.randomUUID().toString();
-
     private int floor;
-
     private int number;
-
-    private RealmList<RealmCheckpoint> checkpoints =  new RealmList<>();
-
-
+    private RealmList<RealmCheckpoint> checkpoints = new RealmList<>();
     private int currentCheckpointNumber = 0;
 
     public String getId() {
@@ -59,16 +54,12 @@ public class RealmFlat extends RealmObject {
         this.currentCheckpointNumber = currentCheckpointNumber;
     }
 
-
-    // You can define inverse relationships.
-    @LinkingObjects("flats")
-    public final RealmResults<RealmHouse> owners = null;
+    public RealmList<RealmCheckpoint> getCheckpoints() {
+        return checkpoints;
+    }
 
     public void setCheckpoints(RealmList<RealmCheckpoint> checkpoints) {
         this.checkpoints = checkpoints;
     }
 
-    public RealmList<RealmCheckpoint> getCheckpoints() {
-        return checkpoints;
-    }
 }

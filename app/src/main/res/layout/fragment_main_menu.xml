@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/efec8174"
-    android:orientation="vertical"
     android:gravity="center_vertical|top"
-    tools:context=".ui.fragments.FlatStartFragment"
+    android:orientation="vertical"
+    android:paddingTop="80dp"
 
-    android:paddingTop="80dp">
+    tools:context=".ui.fragments.FlatStartFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,34 +17,34 @@
         android:textAlignment="center">
 
         <ImageView
-            android:src="@drawable/c38b5dd"
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:src="@drawable/c38b5dd"
             tools:src="@drawable/c38b5dd" />
 
         <ImageView
-            android:layout_marginVertical="65dp"
             android:layout_width="match_parent"
             android:layout_height="20dp"
+            android:layout_marginVertical="65dp"
 
             android:src="@drawable/smlt_logo_blue_ru"
             tools:src="@drawable/smlt_logo_blue_ru" />
     </FrameLayout>
 
     <Button
-        android:layout_margin="14dp"
         android:id="@+id/b_main_create"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_margin="14dp"
         android:text="Создать обход" />
 
 
     <Button
-        android:layout_margin="14dp"
         android:id="@+id/b_main_reports"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_margin="14dp"
         android:text="Отчёты" />
 
     <Button
@@ -64,14 +63,14 @@
 
 
     <!--    -->
-<!--    <TextView-->
-<!--        android:id="@+id/textView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Главное меню (создать обход, история)"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textSize="80dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/button2"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/button"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/button" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Главное меню (создать обход, история)"-->
+    <!--        android:textAlignment="center"-->
+    <!--        android:textSize="80dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/button2"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/button"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/button" />-->
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ltst2023air9.AppDelegate;
-import com.example.ltst2023air9.HouseInfoFragment;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.RealmHouse;
 

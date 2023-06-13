@@ -1,4 +1,4 @@
-package com.example.ltst2023air9.ui.fragments.houseInfo.reportlist;
+package com.example.ltst2023air9.ui.fragments.flatinfo.reportlist;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,29 +6,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ltst2023air9.ui.fragments.HouseInfoFragment;
 import com.example.ltst2023air9.R;
-import com.example.ltst2023air9.model.RealmFlat;
+import com.example.ltst2023air9.model.RealmCheckpoint;
+import com.example.ltst2023air9.ui.fragments.FlatInfoFragment;
 
 import java.util.Collections;
 import java.util.List;
 
-public class FlatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public static final String TAG = FlatListAdapter.class.getSimpleName();
+public class CheckpointListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String TAG = CheckpointListAdapter.class.getSimpleName();
 
-    HouseInfoFragment fragment;
-    //private final ArrayList<House> mHolderList;
-    private List<RealmFlat> flatList = Collections.emptyList();// = new ArrayList<>();;
+    FlatInfoFragment fragment;
+    private List<RealmCheckpoint> realmCheckpointList = Collections.emptyList();// = new ArrayList<>();;
 
-    public FlatListAdapter(HouseInfoFragment fragment) {
+    public CheckpointListAdapter(FlatInfoFragment fragment) {
         this.fragment = fragment;
     }
 
-    public void setData(List<RealmFlat> details) {
+    public void setData(List<RealmCheckpoint> details) {
         if (details == null) {
             details = Collections.emptyList();
         }
-        this.flatList = details;
+        this.realmCheckpointList = details;
         notifyDataSetChanged();
     }
 
@@ -39,21 +38,21 @@ public class FlatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 //        Log.i(TAG, "onCreateViewHolder: " + String.valueOf(viewType));
 
-        return new FlatHolder(
-                inflater.inflate(R.layout.li_flat, parent, false)
+        return new CheckpointHolder(
+                inflater.inflate(R.layout.li_chckpoint, parent, false)
         ).builder(this);
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        FlatHolder flatHolder = (FlatHolder) holder;
-        flatHolder.bind(flatList.get(position));
+        CheckpointHolder flatHolder = (CheckpointHolder) holder;
+        flatHolder.bind(realmCheckpointList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return flatList.size();
+        return realmCheckpointList.size();
     }
 
     @Override
@@ -61,7 +60,7 @@ public class FlatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return -1;
     }
 
-    public void onRecyclerViewItemClick(int position, RealmFlat realmFlat) {
+    public void onRecyclerViewItemClick(int position, RealmCheckpoint realmFlat) {
         fragment.onRecyclerViewItemClick(position, realmFlat);
     }
 

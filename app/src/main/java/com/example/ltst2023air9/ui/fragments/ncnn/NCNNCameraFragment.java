@@ -1,4 +1,4 @@
-package com.example.ltst2023air9.ui.ncnn;
+package com.example.ltst2023air9.ui.fragments.ncnn;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -19,7 +19,6 @@ import androidx.camera.video.Recording;
 import androidx.camera.video.VideoCapture;
 import androidx.camera.video.VideoRecordEvent;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -27,7 +26,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,18 +34,13 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.ltst2023air9.AppDelegate;
-import com.example.ltst2023air9.MediaStorageUtil;
+import com.example.ltst2023air9.util.MediaStorageUtil;
 import com.example.ltst2023air9.R;
 import com.example.ltst2023air9.model.Checkpoint;
-import com.example.ltst2023air9.model.Flat;
-import com.example.ltst2023air9.model.House;
 import com.example.ltst2023air9.model.RealmCheckpoint;
 import com.example.ltst2023air9.model.RealmFlat;
-import com.example.ltst2023air9.model.RealmHouse;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
