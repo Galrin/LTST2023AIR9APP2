@@ -64,7 +64,6 @@ public class FlatInfoFragment extends Fragment {
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         final String flatId = appDelegate.getCurrentRealmFlatId();
-        Log.i("FlatInfo", "flat id: " + appDelegate.getCurrentRealmFlatId());
 
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
@@ -98,7 +97,6 @@ public class FlatInfoFragment extends Fragment {
 
 
     public void onRecyclerViewItemClick(int position, RealmCheckpoint realmCheckpoint) {
-        Log.d("flatList", "position " + position);
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         appDelegate.setCurrentRealmCheckpointId(realmCheckpoint.getId());

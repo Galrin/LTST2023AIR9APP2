@@ -37,8 +37,6 @@ public class FlatListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-//        Log.i(TAG, "onCreateViewHolder: " + String.valueOf(viewType));
-
         return new FlatHolder(
                 inflater.inflate(R.layout.li_flat, parent, false)
         ).builder(this);

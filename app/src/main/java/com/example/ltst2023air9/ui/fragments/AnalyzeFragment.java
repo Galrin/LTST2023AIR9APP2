@@ -251,7 +251,6 @@ public class AnalyzeFragment extends Fragment {
                     }
                 });
 
-                Log.i("videoend", "videoend" + checkpointId + " " + vid);
             }
 
 

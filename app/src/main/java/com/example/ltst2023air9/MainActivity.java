@@ -2,7 +2,6 @@ package com.example.ltst2023air9;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //NavController navController = Navigation.findNavController(this, R.id.nav_graph);
-
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
             RealmResults<RealmHouse> allRealmHouses = r.where(RealmHouse.class).findAll();
@@ -50,6 +47,4 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
-
-
 }

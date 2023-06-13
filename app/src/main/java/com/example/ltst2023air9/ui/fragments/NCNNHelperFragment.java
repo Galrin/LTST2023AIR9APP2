@@ -139,7 +139,6 @@ public class NCNNHelperFragment extends Fragment {
             anal.setEnabled(false);
 
             //Toast.makeText(getActivity(), "resultCode!! ", Toast.LENGTH_SHORT).show();
-            Log.d("onresult", "" + resultCode);
         } else {
             Toast.makeText(getActivity(), "Error selected ", Toast.LENGTH_SHORT).show();
         }

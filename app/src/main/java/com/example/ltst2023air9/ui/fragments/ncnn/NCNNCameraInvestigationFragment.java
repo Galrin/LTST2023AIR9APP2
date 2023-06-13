@@ -56,7 +56,6 @@ public class NCNNCameraInvestigationFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static NCNNCameraInvestigationFragment newInstance(String param1, String param2) {
         return new NCNNCameraInvestigationFragment();
     }
@@ -67,20 +66,13 @@ public class NCNNCameraInvestigationFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_n_c_n_n_camera_investigation, container, false);
     }
-    //import static androidx.camera.core.internal.utils.ImageUtil.createBitmapFromImageProxy;
 
-    public static int VIDEO_SPEED_MAX = 20 + 1;
-    public static int VIDEO_SPEED_MIN = 1;
-    public static int MOBILENETV2_YOLOV3_NANO = 3;
-    public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
     public static boolean USE_GPU = true;
 
-    protected Bitmap mutableBitmap;
     ExecutorService service;
-    Recording recording = null;
     VideoCapture<Recorder> videoCapture = null;
     ImageButton capture, toggleFlash;
-    PreviewView previewView;
+
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
 
     ImageView mPreviewImage;
@@ -88,8 +80,6 @@ public class NCNNCameraInvestigationFragment extends Fragment {
 
     private final AtomicBoolean detectCamera = new AtomicBoolean(false);
     private final AtomicBoolean detectVideo = new AtomicBoolean(false);
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,11 +101,6 @@ public class NCNNCameraInvestigationFragment extends Fragment {
                     .navigate(R.id.action_NCNNCameraInvestigationFragment_to_NCNNCameraFragment);
         });
 
-
-
-//        startCamera(cameraFacing);
-
-
         service = Executors.newSingleThreadExecutor();
     }
 
@@ -134,7 +119,6 @@ public class NCNNCameraInvestigationFragment extends Fragment {
             try {
                 ProcessCameraProvider cameraProvider = processCameraProvider.get();
                 Preview preview = new Preview.Builder().build();
-                //preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
                 Recorder recorder = new Recorder.Builder()
                         .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
@@ -157,8 +141,6 @@ public class NCNNCameraInvestigationFragment extends Fragment {
                 imageAnalysis.setAnalyzer(detectService, new ImageAnalysis.Analyzer() {
                     @Override
                     public void analyze(@NonNull ImageProxy image) {
-                        //Log.v("anal", "atomic set is: " + mIsPreviewDetectorEnable.get());
-                        //if (mIsPreviewDetectorEnable.get()) {
 
                         Bitmap bitmapBuffer = Bitmap.createBitmap(
                                 image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
@@ -166,40 +148,18 @@ public class NCNNCameraInvestigationFragment extends Fragment {
                             bitmapBuffer.copyPixelsFromBuffer(image.getPlanes()[0].getBuffer());
                         } catch (Exception e) {}
 
-
-//
-//                        Matrix matrix = new Matrix();
-//                        matrix.postRotate(180);
-//
-//                        int width = image.getWidth();
-//                        int height = image.getHeight();
-//
-//                        final Bitmap bitmap = Bitmap.createBitmap(bitmapBuffer, 0, 0, width, height, matrix, false);
-//
-
-
                         YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmapBuffer, USE_GPU);
                         final Bitmap drawBitmap = drawBoxRects(bitmapBuffer.copy(Bitmap.Config.ARGB_8888, true), result);
-
-
 
                         if (result != null) {
                             detectorAnalyzer.add(result);
                         }
-                        //Bitmap bmp = previewView.getBitmap(); // ужастный вариант. скорее избавиться от него!
-
-                        /*  по скорости хорошо, но глючный кадр */
-                        //@SuppressLint("UnsafeOptInUsageError") Bitmap bmp = toBitmap(image.getImage());
-
-                        // портировано со старой версии 1 в 1, на выходе полностью искажено
-                        //Bitmap bmp = imageToBitmap(image);
 
                         new Handler(Looper.getMainLooper()).post(() -> {
                             mPreviewImage.setImageBitmap(drawBitmap);
                         });
-                        //}
-                        image.close();
 
+                        image.close();
                     }
                 });
 

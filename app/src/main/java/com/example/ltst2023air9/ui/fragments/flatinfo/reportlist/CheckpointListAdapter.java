@@ -36,8 +36,6 @@ public class CheckpointListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-//        Log.i(TAG, "onCreateViewHolder: " + String.valueOf(viewType));
-
         return new CheckpointHolder(
                 inflater.inflate(R.layout.li_chckpoint, parent, false)
         ).builder(this);

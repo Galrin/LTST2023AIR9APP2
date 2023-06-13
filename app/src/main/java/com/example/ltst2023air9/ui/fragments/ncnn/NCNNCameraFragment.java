@@ -109,16 +109,11 @@ public class NCNNCameraFragment extends Fragment {
 
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
-            Log.i("RECORDERCAMERAFRAGMENT", "------------------");
 
             RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
             if (realmFlat != null) {
                 mCurrentCheckpointNumber = realmFlat.getCurrentCheckpointNumber();
-                Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
-                Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint: " + mCurrentCheckpointNumber);
             }
-            Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
-
         });
 
         ImageButton cameraInvestigation = view.findViewById(R.id.ib_camera_investigation);
@@ -175,15 +170,6 @@ public class NCNNCameraFragment extends Fragment {
 
                     final String currentRealmFlatId = appDelegate.getCurrentRealmFlatId();
 
-
-                    //appDelegate.getCheckpoints().get(flat.getCurrentCheckpoint()).setVideoPath(String.valueOf(((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri()));
-                    // если вышли за рамки списка - обход окончен - анализ
-                    // если не вышли - возврат к 'шагам обхода'
-
-                    ///TODO: добавить к RealmCheckpoint Global Checkpoint List id
-                    Log.d("camerafragment", "flat.getCurrentCheckpoint(" + mCurrentCheckpointNumber + ")");
-                    Log.d("camerafragment", "appDelegate.getCheckpoints().size(" + appDelegate.getCheckpoints().size() + ")");
-
                     Realm db = Realm.getDefaultInstance();
 
                     Checkpoint checkpoint = appDelegate.getCheckpoints().get(mCurrentCheckpointNumber);
@@ -194,13 +180,9 @@ public class NCNNCameraFragment extends Fragment {
                         realmCheckpoint.setName(checkpointName);
                         realmCheckpoint.setVideoPath(y);
 
-                        Log.i("camerafragment_flat", "=====" );
-                        Log.i("camerafragment_flat", "ap flat id "  + currentRealmFlatId);
                         RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
 
                         if (realmFlat != null) {
-                            Log.i("camerafragment_flat", "find id " + realmFlat.getId());
-
                             realmFlat.getCheckpoints().add(realmCheckpoint);
                         }
                     });
@@ -211,15 +193,11 @@ public class NCNNCameraFragment extends Fragment {
                         //flat.setCurrentCheckpoint(flat.getCurrentCheckpoint() + 1);
 
                         db.executeTransactionAsync(r -> {
-                            Log.i("RECORDERCAMERAFRAGMENT", "GOTO: STEP REPEAT------------------");
 
                             RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
                             if (realmFlat != null) {
                                 realmFlat.setCurrentCheckpointNumber(mCurrentCheckpointNumber + 1);
-                                Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
-                                Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint after++: " + realmFlat.getCurrentCheckpointNumber());
                             }
-                            Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
 
                         });
 
@@ -228,15 +206,11 @@ public class NCNNCameraFragment extends Fragment {
                     } else { /// GOTO: ANAL
                         //flat.setCurrentCheckpoint( 0 );
                     db.executeTransactionAsync(r -> {
-                        Log.i("RECORDERCAMERAFRAGMENT", "GOTO: ANAL------------------");
 
                         RealmFlat realmFlat = r.where(RealmFlat.class).equalTo("id", currentRealmFlatId).findFirst();
                         if (realmFlat != null) {
                             realmFlat.setCurrentCheckpointNumber(0);
-                            Log.i("RECORDERCAMERAFRAGMENT", "current RealmFlatId: " + realmFlat.getId());
-                            Log.i("RECORDERCAMERAFRAGMENT", "current GLOBAL checkpoint after reset: " + realmFlat.getCurrentCheckpointNumber());
                         }
-                        Log.i("RECORDERCAMERAFRAGMENT", "//------------------");
 
                     });
                         NavHostFragment.findNavController(NCNNCameraFragment.this)
@@ -247,9 +221,7 @@ public class NCNNCameraFragment extends Fragment {
                 } else {
                     recording.close();
                     recording = null;
-                    String msg = "Error: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getError();
                     //Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    Log.e("camerafragment", msg);
                 }
                 capture.setImageResource(R.drawable.round_fiber_manual_record_24);
             }

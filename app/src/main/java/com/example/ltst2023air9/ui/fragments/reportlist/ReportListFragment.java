@@ -116,7 +116,6 @@ public class ReportListFragment extends Fragment {
 
     public void onRecyclerViewItemClick(int position) {
         //Toast.makeText(getContext(), "aaa" + position, Toast.LENGTH_SHORT).show();
-        Log.d("houseList", "" + position);
 
         NavHostFragment.findNavController(ReportListFragment.this)
                 .navigate(R.id.action_reportListFragment_to_houseInfoFragment);

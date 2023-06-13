@@ -28,7 +28,6 @@ public class HouseInfoFragment extends Fragment {
     private TextView mTextObjectName;
     private TextView mTextObjectFlatCount;
 
-
     private RecyclerView mRecyclerView;
 
     private FlatListAdapter mAdapter;
@@ -52,7 +51,6 @@ public class HouseInfoFragment extends Fragment {
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         final String houseId = appDelegate.getCurrentRealmHouseId();
-        Log.i("HouseInfo", "house id: " + appDelegate.getCurrentRealmHouseId());
 
         Realm db = Realm.getDefaultInstance();
         db.executeTransactionAsync(r -> {
@@ -94,7 +92,6 @@ public class HouseInfoFragment extends Fragment {
     }
 
     public void onRecyclerViewItemClick(int position, RealmFlat realmFlat) {
-        Log.d("flatList", "position " + position);
 
         AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
         appDelegate.setCurrentRealmFlatId(realmFlat.getId());
