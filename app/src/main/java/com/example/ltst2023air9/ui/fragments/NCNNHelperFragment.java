@@ -224,17 +224,8 @@ public class NCNNHelperFragment extends Fragment {
         }
         detectVideo.set(true);
         detectorAnalyzer.clear();
-        //Toast.makeText(getActivity(), "FPS is not accurate!", Toast.LENGTH_SHORT).show();
-        //sbVideo.setVisibility(View.VISIBLE);
-        //sbVideoSpeed.setVisibility(View.VISIBLE);
-        try {
-            ListenableFuture<ProcessCameraProvider> processCameraProvider = ProcessCameraProvider.getInstance(getActivity());
 
-            ProcessCameraProvider cameraProvider = processCameraProvider.get();
 
-            cameraProvider.unbindAll();
-        } catch (Exception e) {
-        }
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -250,23 +241,17 @@ public class NCNNHelperFragment extends Fragment {
 //                String sHeight = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);  // h
                 String rota = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);  // rotation
                 int duration = Integer.parseInt(dur);
-                //float fps = Float.parseFloat(sfps);
                 float rotate = 0;
                 if (rota != null) {
                     rotate = Float.parseFloat(rota);
                 }
-                //sbVideo.setMax(duration * 1000);
-                //float frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
-                videoCurFrameLoc = 0;
 
                 Handler handler = new Handler(Looper.getMainLooper());
                 AppDelegate appDelegate = (AppDelegate) getActivity().getApplicationContext();
 
                 for (int i = 0; i < numFrames; i++) {
 
-                    //videoCurFrameLoc = (long) (videoCurFrameLoc + frameDis);
-                    //sbVideo.setProgress((int) videoCurFrameLoc);
-                    final Bitmap b = mmr.getFrameAtIndex(i);//getFrameAtTime(videoCurFrameLoc, MediaMetadataRetriever.OPTION_CLOSEST_SYNC );
+                    final Bitmap b = mmr.getFrameAtIndex(i);
                     if (b == null) {
                         continue;
                     }
@@ -275,12 +260,6 @@ public class NCNNHelperFragment extends Fragment {
                     width = b.getWidth();
                     height = b.getHeight();
                     final Bitmap bitmap = Bitmap.createBitmap(b, 0, 0, width, height, matrix, false);
-                    //startTime = System.currentTimeMillis();
-
-                    /// bitmap.copy(Bitmap.Config.ARGB_8888, true)
-
-                    //Bitmap drawBitmap = detectAndDraw(bitmap.copy(Bitmap.Config.ARGB_8888, true));
-
 
                     YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(bitmap, USE_GPU);
                     final Bitmap drawBitmap = drawBoxRects(bitmap.copy(Bitmap.Config.ARGB_8888, true), result);
@@ -289,20 +268,15 @@ public class NCNNHelperFragment extends Fragment {
                         detectorAnalyzer.add(result);
                     }
 
-
-                    //showResultOnUI();
                     handler.post(() -> {
                         mImageView.setImageBitmap(drawBitmap);
                     });
-                    //frameDis = 1.0f / fps * 1000 * 1000 * videoSpeed;
-
-                    //appDelegate.getTableViewModel().updateRow(11, "hello % for..");
-
-                    try {
-                        Thread.sleep(33); // 30 fps :D
-                    } catch (InterruptedException e) {
-
-                    }
+//
+//                    try {
+//                        Thread.sleep(33); // 30 fps :D
+//                    } catch (InterruptedException e) {
+//
+//                    }
                 }
                 try {
                     mmr.release();
@@ -317,82 +291,21 @@ public class NCNNHelperFragment extends Fragment {
                 }
 
                 if (detectVideo.get()) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //sbVideo.setVisibility(View.GONE);
-                            //sbVideoSpeed.setVisibility(View.GONE);
                             anal.setEnabled(true);
-                            Toast.makeText(getActivity(), "Video end!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(), "Video end!", Toast.LENGTH_LONG).show();
+                            NavHostFragment.findNavController(NCNNHelperFragment.this)
+                                    .navigate(R.id.action_NCNNCameraHelperFragment_to_reportsFragment);
                         }
-                    });
+                    }, 1000);
                 }
                 detectVideo.set(false);
             }
         }, "video detect");
         thread.start();
-//        startCamera();
     }
-
-    public Bitmap getPicture(Uri selectedImage) {
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-        if (bitmap == null) {
-            return null;
-        }
-        int rotate = readPictureDegree(picturePath);
-        return rotateBitmapByDegree(bitmap, rotate);
-    }
-
-    public int readPictureDegree(String path) {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return degree;
-    }
-
-    public Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
-        Bitmap returnBm = null;
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        try {
-            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
-                    bm.getHeight(), matrix, true);
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-        }
-        if (returnBm == null) {
-            returnBm = bm;
-        }
-        if (bm != returnBm) {
-            bm.recycle();
-        }
-        return returnBm;
-    }
-
 
     ////////////////////////////////////////////////
     protected Bitmap drawBoxRects(Bitmap mutableBitmap, YoloV5Ncnn.Obj[] objects) {
@@ -460,22 +373,6 @@ public class NCNNHelperFragment extends Fragment {
 
                 canvas.drawText(text, x, y - textpaint.ascent(), textpaint);
             }
-        }
-        return mutableBitmap;
-    }
-
-
-    protected Bitmap detectAndDraw(Bitmap image) {
-        //Box[] result = null;
-        YoloV5Ncnn.Obj[] result = yolov5ncnn.Detect(image, true);
-
-        if (result == null) {
-            detectCamera.set(false);
-            return image;
-        }
-        if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO
-                || USE_MODEL == YOLOV5_CUSTOM_LAYER) {
-            mutableBitmap = drawBoxRects(image, result);
         }
         return mutableBitmap;
     }
